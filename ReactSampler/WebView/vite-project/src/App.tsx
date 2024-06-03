@@ -1,45 +1,22 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-
+import MidiKeyboard from './components/MidiKeyboard.tsx'
+import GainKnob from './components/GainKnob.tsx'
 // @ts-ignore
 import * as Juce from "juce-framework-frontend";
+import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
-  const sayHelloFromWebView = Juce.getNativeFunction("sayHelloFromWebView");
-  
   return (
     <>
+      <h1>React Sampler</h1>
+      <div style={{display: 'flex', flexDirection: 'column', justifyContent:'center', alignItems:'center'}}>
+          <div style={{marginTop: '-10px'}}><GainKnob/></div>
+          <div style={{marginTop: '-10px'}}>GAIN</div>
+          <div style={{margin: '10px', padding: 0}}></div>
+      </div>
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <MidiKeyboard/>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => {
-            // @ts-ignore
-            sayHelloFromWebView("JUCE")
-            .then((result: any) => {
-              setCount((count) => count + 1);
-              console.log(result);
-            });
-          }}
-        >
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   )
 }
