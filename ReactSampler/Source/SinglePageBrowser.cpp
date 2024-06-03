@@ -3,12 +3,12 @@
 //==============================================================================
 #if JUCE_ANDROID
 // The localhost is available on this address to the emulator
-const juce::String localDevServerAddress = "http://10.0.2.2:3000/";
+const juce::String SinglePageBrowser::localDevServerAddress = "http://10.0.2.2:3000/";
 #else
-const juce::String localDevServerAddress = "http://localhost:3000/";
+const juce::String SinglePageBrowser::localDevServerAddress = "http://localhost:5173/";
 #endif
 
-const juce::String fallbackPageHtml = R"(
+const juce::String SinglePageBrowser::fallbackPageHtml = R"(
 <!DOCTYPE html>
 <html>
   <head>

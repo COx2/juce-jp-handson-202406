@@ -2,24 +2,12 @@
 #include "PluginEditor.h"
 #include "WebViewBundleData.h"
 
-#ifndef WEB_VIEW_FROM_SERVER
-#define WEB_VIEW_FROM_SERVER 0
+#ifndef WEB_VIEW_FROM_DEV_SERVER
+#define WEB_VIEW_FROM_DEV_SERVER 1
 #endif
 
 namespace
 {
-    static juce::ZipFile* getZipFile()
-    {
-        auto misWebViewBundle = std::make_unique<juce::MemoryInputStream>(WebView::WebViewBundle_zip, WebView::WebViewBundle_zipSize, false);
-        //auto zipWebViewBundle = std::make_unique<juce::ZipFile>(misWebViewBundle);
-
-        if (misWebViewBundle.get() == nullptr)
-            return nullptr;
-
-        static juce::ZipFile zip_file{ misWebViewBundle.get(), false };
-        return &zip_file;
-    }
-
     static const char* getMimeForExtension(const juce::String& extension)
     {
         static const std::unordered_map<juce::String, const char*> mimeMap =
@@ -64,6 +52,18 @@ namespace
 
         return result;
     }
+
+    std::vector<std::byte> convertFromStringToByteVector(const std::string& s)
+    {
+        std::vector<std::byte> bytes;
+        bytes.reserve(std::size(s));
+
+        std::transform(std::begin(s), std::end(s), std::back_inserter(bytes), [](char const& c) {
+            return std::byte(c);
+            });
+
+        return bytes;
+    }
 }
 
 //==============================================================================
@@ -71,11 +71,15 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     : AudioProcessorEditor (&p)
     , processorRef (p)
     , valueTreeState (p.getAPVTS())
+    , misWebViewBundle(WebView::WebViewBundle_zip, WebView::WebViewBundle_zipSize, false)
 {
     juce::ignoreUnused (processorRef);
 
+    zipWebViewBundle = std::make_unique<juce::ZipFile>(misWebViewBundle);
+
     const auto webview_options = juce::WebBrowserComponent::Options {}
         .withBackend(juce::WebBrowserComponent::Options::Backend::webview2)
+        .withKeepPageLoadedWhenBrowserIsHidden()
         .withWinWebView2Options(juce::WebBrowserComponent::Options::WinWebView2{}
         .withUserDataFolder(juce::File::getSpecialLocation(juce::File::SpecialLocationType::tempDirectory)))
         .withNativeIntegrationEnabled()
@@ -96,7 +100,11 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
 
     addAndMakeVisible(singlePageBrowser.get());
 
+#if WEB_VIEW_FROM_DEV_SERVER
+    singlePageBrowser->goToURL(SinglePageBrowser::localDevServerAddress);
+#else
     singlePageBrowser->goToURL(juce::WebBrowserComponent::getResourceProviderRoot());
+#endif
 
     gainLabel.setText ("Gain", juce::dontSendNotification);
     addAndMakeVisible (gainLabel);
@@ -200,16 +208,18 @@ void AudioPluginAudioProcessorEditor::parameterChanged(const juce::String& param
     }
 }
 
+//==============================================================================
 void AudioPluginAudioProcessorEditor::timerCallback()
 {
 }
 
+//==============================================================================
 std::optional<juce::WebBrowserComponent::Resource> AudioPluginAudioProcessorEditor::getWebViewResource(const juce::String& url)
 {
     const auto urlToRetrive = url == "/" ? juce::String{ "index.html" }
     : url.fromFirstOccurrenceOf("/", false, false);
 
-    if (auto* archive = getZipFile())
+    if (auto* archive = zipWebViewBundle.get())
     {
         if (auto* entry = archive->getEntry(urlToRetrive))
         {
@@ -227,10 +237,9 @@ std::optional<juce::WebBrowserComponent::Resource> AudioPluginAudioProcessorEdit
     if (urlToRetrive == "index.html")
     {
         auto fallbackIndexHtml = SinglePageBrowser::fallbackPageHtml;
-        juce::MemoryInputStream mis = (fallbackIndexHtml.toRawUTF8(), fallbackIndexHtml.getNumBytesAsUTF8());
 
         return juce::WebBrowserComponent::Resource{
-            streamToVector(mis),
+            convertFromStringToByteVector(fallbackIndexHtml.toStdString()),
             juce::String { "text/html" }
         };
     }

@@ -30,7 +30,13 @@
                 "base"
             ],
             "generator": "Visual Studio 17 2022",
-            "architecture": "x64"
+            "architecture": "x64",
+            "cacheVariables": {
+                "JUCE_WEBVIEW2_PACKAGE_LOCATION": {
+                    "type": "PATH",
+                    "value": "${sourceDir}/External/nuget"
+                }
+            }
         },
         {
             "name": "ninja-multi",

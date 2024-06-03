@@ -24,8 +24,10 @@ private:
     //==============================================================================
     virtual void parameterChanged(const juce::String& parameterID, float newValue) override;
 
+    //==============================================================================
     virtual void timerCallback() override;
 
+    //==============================================================================
     std::optional<juce::WebBrowserComponent::Resource> getWebViewResource(const juce::String& url);
 
     // This reference is provided as a quick way for your editor to
@@ -46,6 +48,8 @@ private:
     juce::ToggleButton invertButton;
     std::unique_ptr<ButtonAttachment> invertAttachment;
 
+    juce::MemoryInputStream misWebViewBundle;
+    std::unique_ptr<juce::ZipFile> zipWebViewBundle;
     std::unique_ptr<SinglePageBrowser> singlePageBrowser;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessorEditor)
