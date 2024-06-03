@@ -49,8 +49,8 @@ target_sources(${BaseTargetName}
 
 target_compile_definitions(${BaseTargetName}
     PUBLIC
+        JUCE_WEB_BROWSER=1
         JUCE_USE_WIN_WEBVIEW2_WITH_STATIC_LINKING=1
-        JUCE_WEB_BROWSER=0
         JUCE_USE_CURL=0
         JUCE_VST3_CAN_REPLACE_VST2=0)
 

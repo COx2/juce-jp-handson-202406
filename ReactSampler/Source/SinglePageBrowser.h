@@ -2,16 +2,25 @@
 
 #include <juce_gui_extra/juce_gui_extra.h>
 
-extern const String localDevServerAddress;
-
-std::optional<WebBrowserComponent::Resource> getResource (const String& url);
 
 //==============================================================================
-struct SinglePageBrowser
+class SinglePageBrowser
     : public juce::WebBrowserComponent
 {
-    using WebBrowserComponent::WebBrowserComponent;
+public:
+    //==============================================================================
+    // Inherit constructor from parent.
+    using juce::WebBrowserComponent::WebBrowserComponent;
 
     // Prevent page loads from navigating away from our single page web app
-    bool pageAboutToLoad (const String& newURL) override;
+    bool pageAboutToLoad (const juce::String& newURL) override;
+
+    //==============================================================================
+    static const juce::String localDevServerAddress;
+    static const juce::String fallbackPageHtml;
+
+private:
+    //==============================================================================
+
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SinglePageBrowser)
 };

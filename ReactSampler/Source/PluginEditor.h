@@ -1,8 +1,9 @@
 #pragma once
 
-#include "PluginProcessor.h"
 #include <juce_gui_extra/juce_gui_extra.h>
 #include <juce_data_structures/juce_data_structures.h>
+#include "PluginProcessor.h"
+#include "SinglePageBrowser.h"
 
 //==============================================================================
 class AudioPluginAudioProcessorEditor final
@@ -25,14 +26,11 @@ private:
 
     virtual void timerCallback() override;
 
+    std::optional<juce::WebBrowserComponent::Resource> getWebViewResource(const juce::String& url);
+
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     AudioPluginAudioProcessor& processorRef;
-
-    std::unique_ptr<juce::Component> juceWebViewHolder;
-
-    juce::MemoryInputStream misWebViewBundle;
-    std::unique_ptr<juce::ZipFile> zipWebViewBundle;
 
     std::weak_ptr<juce::MidiKeyboardState> midiKeyboardStatePtr;
 
@@ -47,6 +45,8 @@ private:
  
     juce::ToggleButton invertButton;
     std::unique_ptr<ButtonAttachment> invertAttachment;
+
+    std::unique_ptr<SinglePageBrowser> singlePageBrowser;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessorEditor)
 };

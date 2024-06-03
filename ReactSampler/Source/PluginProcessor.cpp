@@ -176,18 +176,6 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
         previousGain = currentGain;
     }
 
-    for (int sample_idx = 0; sample_idx < buffer.getNumSamples(); sample_idx++)
-    {
-        if (buffer.getNumChannels() > 0)
-        {
-            audioFFIO_Left.push (buffer.getReadPointer (0)[sample_idx]);
-        }
-        if (buffer.getNumChannels() > 1)
-        {
-            audioFFIO_Right.push (buffer.getReadPointer (1)[sample_idx]);
-        }
-    }
-
     midiMessages.clear();
 }
 
@@ -232,11 +220,6 @@ void AudioPluginAudioProcessor::setStateInformation (const void* data, int sizeI
 std::shared_ptr<juce::MidiKeyboardState> AudioPluginAudioProcessor::getMidiKeyboardState() const
 {
     return midiKeyboardState;
-}
-
-AudioPluginAudioProcessor::StereoAudioFIFOAccess AudioPluginAudioProcessor::getStereoAudioFIFOAccess()
-{
-    return { &audioFFIO_Left, &audioFFIO_Right };
 }
 
 //==============================================================================
