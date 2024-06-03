@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@jsteinotr/react-select": "^5.7.4",
     "juce-framework-frontend": "file:../../../External/JUCE/modules/juce_gui_extra/native/javascript",
     "rc-knob": "^1.0.1",
     "react": "^18.2.0",
