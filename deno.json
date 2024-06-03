@@ -1,0 +1,6 @@
+{
+    "tasks": {
+        "get:webview2": "deno run --allow-all ./Tools/deno/nuget-dl.ts && deno run --allow-all ./Tools/deno/get-webview2.ts",
+        "build:webviewbundle": "deno run --allow-all ./ReactSampler/WebView/build-webview-bundle.ts"
+    }
+}
