@@ -1,3 +1,4 @@
+// @ts-ignore
 import { useState } from 'react'
 import MidiKeyboard from './components/MidiKeyboard.tsx'
 import GainKnob from './components/GainKnob.tsx'

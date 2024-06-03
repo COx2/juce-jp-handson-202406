@@ -10,17 +10,22 @@ const GainKnob = () => {
   const sliderState = Juce.getSliderState("gainSlider");
 
   const [value0To1, setValue0To1] = useState(sliderState.getNormalisedValue());
+
+  // @ts-ignore
   const [properties, setProperties] = useState(sliderState.properties);
 
+  // @ts-ignore
   const handleChange = (event: any, newValue0To1: any) => {
     sliderState.setNormalisedValue(newValue0To1);
     setValue0To1(value0To1);
   };
 
+  // @ts-ignore
   const mouseDown = () => {
     sliderState.sliderDragStarted();
   };
 
+  // @ts-ignore
   const changeCommitted = (event: any, newValue0To1: any) => {
     sliderState.setNormalisedValue(newValue0To1);
     sliderState.sliderDragEnded();
@@ -40,6 +45,7 @@ const GainKnob = () => {
     };
   });
 
+  // @ts-ignore
   function calculateValue() {
     return sliderState.getScaledValue();
   }
@@ -53,12 +59,6 @@ const GainKnob = () => {
     max={100}
     // @ts-ignore
     onChange={value => {
-        const jsonData = {
-            sliderName: "gain",
-            sliderValue: value,
-            sliderRangeMin: 0,
-            sliderRangeMax: 100
-        };
         handleChange("changed", value / 100)
     }}
     >
