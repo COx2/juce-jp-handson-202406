@@ -77,6 +77,50 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
 
     zipWebViewBundle = std::make_unique<juce::ZipFile>(misWebViewBundle);
 
+    auto web_view_callback_on_midi_note_on =
+        [safe_this = juce::Component::SafePointer(this)](const juce::Array<juce::var>& args, std::function<void(juce::var)> complete)
+        -> void
+        {
+            if (safe_this.getComponent() == nullptr)
+            {
+                complete(juce::var(-1));
+                return;
+            }
+
+            const auto midi_channel = args.getReference(0);
+            const auto midi_note_number = args.getReference(1);
+
+            if (!safe_this->midiKeyboardStatePtr.expired())
+            {
+                safe_this->midiKeyboardStatePtr.lock()->noteOn((int)midi_channel, (int)midi_note_number, 0.6f);
+            }
+
+            complete(juce::var(0));
+            return;
+        };
+
+    auto web_view_callback_on_midi_note_off =
+        [safe_this = juce::Component::SafePointer(this)](const juce::Array<juce::var>& args, std::function<void(juce::var)> complete)
+        -> void
+        {
+            if (safe_this.getComponent() == nullptr)
+            {
+                complete(juce::var(-1));
+                return;
+            }
+
+            const auto midi_channel = args.getReference(0);
+            const auto midi_note_number = args.getReference(1);
+
+            if (!safe_this->midiKeyboardStatePtr.expired())
+            {
+                safe_this->midiKeyboardStatePtr.lock()->noteOff((int)midi_channel, (int)midi_note_number, 0.0f);
+            }
+
+            complete(juce::var(0));
+            return;
+        };
+
     const auto webview_options = juce::WebBrowserComponent::Options {}
         .withBackend(juce::WebBrowserComponent::Options::Backend::webview2)
         .withKeepPageLoadedWhenBrowserIsHidden()
@@ -90,6 +134,8 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
             {
                 complete("Hello " + var[0].toString());
             })
+        .withNativeFunction("onMidiNoteOn", web_view_callback_on_midi_note_on)
+        .withNativeFunction("onMidiNoteOff", web_view_callback_on_midi_note_off)
         .withResourceProvider([this](const auto& url)
             {
                 return getWebViewResource(url);
