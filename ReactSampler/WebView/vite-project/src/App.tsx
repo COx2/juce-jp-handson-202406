@@ -3,6 +3,7 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
+// @ts-ignore
 import * as Juce from "juce-framework-frontend";
 
 function App() {
@@ -22,8 +23,9 @@ function App() {
       <h1>Vite + React</h1>
       <div className="card">
         <button onClick={() => {
+            // @ts-ignore
             sayHelloFromWebView("JUCE")
-            .then((result) => {
+            .then((result: any) => {
               setCount((count) => count + 1);
               console.log(result);
             });
