@@ -3,7 +3,7 @@
 #include "WebViewBundleData.h"
 
 #ifndef WEB_VIEW_FROM_DEV_SERVER
-#define WEB_VIEW_FROM_DEV_SERVER 1
+#define WEB_VIEW_FROM_DEV_SERVER 0
 #endif
 
 namespace
