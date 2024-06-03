@@ -59,7 +59,7 @@ const GainKnob = () => {
             sliderRangeMin: 0,
             sliderRangeMax: 100
         };
-        handleChange("hoge", value)
+        handleChange("changed", value)
     }}
     >
         <Arc 
