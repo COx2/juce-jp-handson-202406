@@ -10,7 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
     "@jsteinotr/react-select": "^5.7.4",
+    "@mui/material": "^5.15.19",
     "juce-framework-frontend": "file:../../../External/JUCE/modules/juce_gui_extra/native/javascript",
     "rc-knob": "^1.0.1",
     "react": "^18.2.0",
