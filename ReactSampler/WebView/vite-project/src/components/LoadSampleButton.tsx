@@ -2,13 +2,16 @@ import Button from '@mui/material/Button';
 // @ts-ignore
 import * as Juce from "juce-framework-frontend";
 
-const OpenFileChooserButton = (props: any) => {
+const LoadSampleButton = (props: any) => {
     
     const onButtonClicked = Juce.getNativeFunction("onLoadCustomSound");
 
     return (
         <Button
         variant="contained"
+        sx={{
+            width: '180px'
+        }}
         onClick={() => {
             onButtonClicked(props.native_message);
         }}
@@ -18,4 +21,4 @@ const OpenFileChooserButton = (props: any) => {
     );
 };
 
-export default OpenFileChooserButton;
+export default LoadSampleButton;
