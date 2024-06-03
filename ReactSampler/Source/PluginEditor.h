@@ -3,7 +3,7 @@
 #include <juce_gui_extra/juce_gui_extra.h>
 #include <juce_data_structures/juce_data_structures.h>
 #include "PluginProcessor.h"
-#include "SinglePageBrowser.h"
+#include "WebViewBackendComponent.h"
 
 //==============================================================================
 class AudioPluginAudioProcessorEditor final
@@ -27,9 +27,6 @@ private:
     //==============================================================================
     virtual void timerCallback() override;
 
-    //==============================================================================
-    std::optional<juce::WebBrowserComponent::Resource> getWebViewResource(const juce::String& url);
-
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     AudioPluginAudioProcessor& processorRef;
@@ -43,14 +40,12 @@ private:
  
     juce::Label gainLabel;
     juce::Slider gainSlider;
-    std::unique_ptr<SliderAttachment> gainAttachment;
+    std::unique_ptr<SliderAttachment> cppGainAttachment;
  
     juce::ToggleButton invertButton;
     std::unique_ptr<ButtonAttachment> invertAttachment;
 
-    juce::MemoryInputStream misWebViewBundle;
-    std::unique_ptr<juce::ZipFile> zipWebViewBundle;
-    std::unique_ptr<SinglePageBrowser> singlePageBrowser;
+    std::unique_ptr<WebViewBackendComponent> webViewBackend;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessorEditor)
 };

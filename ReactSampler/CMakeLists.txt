@@ -47,6 +47,8 @@ target_sources(${BaseTargetName}
         Source/JuceDemoSynthesizer.h
         Source/SinglePageBrowser.cpp
         Source/SinglePageBrowser.h
+        Source/WebViewBackendComponent.cpp
+        Source/WebViewBackendComponent.h
         )
 
 target_compile_definitions(${BaseTargetName}

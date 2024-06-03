@@ -7,13 +7,13 @@ import * as Juce from "juce-framework-frontend";
 
 const GainKnob = () => {
   // @ts-ignore
-  const sliderState = Juce.getSliderState("gain");
+  const sliderState = Juce.getSliderState("gainSlider");
 
   const [value, setValue] = useState(sliderState.getNormalisedValue());
   const [properties, setProperties] = useState(sliderState.properties);
 
   const handleChange = (event: any, newValue: any) => {
-    sliderState.setNormalisedValue(newValue);
+    sliderState.setNormalisedValue(newValue / 100);
     setValue(newValue);
   };
 
@@ -22,13 +22,13 @@ const GainKnob = () => {
   };
 
   const changeCommitted = (event: any, newValue: any) => {
-    sliderState.setNormalisedValue(newValue);
+    sliderState.setNormalisedValue(newValue / 100);
     sliderState.sliderDragEnded();
   };
 
   useEffect(() => {
     const valueListenerId = sliderState.valueChangedEvent.addListener(() => {
-      setValue(sliderState.getNormalisedValue());
+      setValue(sliderState.getNormalisedValue() * 100);
     });
     const propertiesListenerId = sliderState.propertiesChangedEvent.addListener(
       () => setProperties(sliderState.properties)
