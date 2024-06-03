@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import MidiKeyboard from './components/MidiKeyboard.tsx'
 import GainKnob from './components/GainKnob.tsx'
-import SampleSelector from './components/SampleSelector.tsx';
+import SoundSelector from './components/SoundSelector.tsx';
+import OpenFileChooserButton from './components/OpenFileChooserButton.tsx';
 // @ts-ignore
 import * as Juce from "juce-framework-frontend";
 import './App.css'
@@ -16,8 +17,9 @@ function App() {
           <div style={{margin: '10px', padding: 0}}></div>
       </div>
       <div style={{display: 'flex', flexDirection: 'column', justifyContent:'center', alignItems:'center'}}>
-          <div style={{marginTop: '0px'}}>SAMPLE</div>
-          <div style={{marginTop: '10px'}}><SampleSelector/></div>
+          <div style={{marginTop: '0px'}}>SOUND</div>
+          <div style={{marginTop: '10px'}}><SoundSelector/></div>
+          <div style={{marginTop: '10px'}}><OpenFileChooserButton text="Load Sample"/></div>
           <div style={{margin: '10px', padding: 0}}></div>
       </div>
       <div>

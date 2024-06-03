@@ -8,7 +8,7 @@ import * as Juce from "juce-framework-frontend";
 
 const MidiKeyboard = () => {
     
-    const firstNote = MidiNumbers.fromNote('c4');
+    const firstNote = MidiNumbers.fromNote('c3');
     const lastNote = MidiNumbers.fromNote('f6');
     const keyboardShortcuts = KeyboardShortcuts.create({
         firstNote: firstNote,

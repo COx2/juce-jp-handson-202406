@@ -9,26 +9,26 @@ const GainKnob = () => {
   // @ts-ignore
   const sliderState = Juce.getSliderState("gainSlider");
 
-  const [value, setValue] = useState(sliderState.getNormalisedValue());
+  const [value0To1, setValue0To1] = useState(sliderState.getNormalisedValue());
   const [properties, setProperties] = useState(sliderState.properties);
 
-  const handleChange = (event: any, newValue: any) => {
-    sliderState.setNormalisedValue(newValue / 100);
-    setValue(newValue);
+  const handleChange = (event: any, newValue0To1: any) => {
+    sliderState.setNormalisedValue(newValue0To1);
+    setValue0To1(value0To1);
   };
 
   const mouseDown = () => {
     sliderState.sliderDragStarted();
   };
 
-  const changeCommitted = (event: any, newValue: any) => {
-    sliderState.setNormalisedValue(newValue / 100);
+  const changeCommitted = (event: any, newValue0To1: any) => {
+    sliderState.setNormalisedValue(newValue0To1);
     sliderState.sliderDragEnded();
   };
 
   useEffect(() => {
     const valueListenerId = sliderState.valueChangedEvent.addListener(() => {
-      setValue(sliderState.getNormalisedValue() * 100);
+      setValue0To1(sliderState.getNormalisedValue());
     });
     const propertiesListenerId = sliderState.propertiesChangedEvent.addListener(
       () => setProperties(sliderState.properties)
@@ -59,7 +59,7 @@ const GainKnob = () => {
             sliderRangeMin: 0,
             sliderRangeMax: 100
         };
-        handleChange("changed", value)
+        handleChange("changed", value / 100)
     }}
     >
         <Arc 
@@ -67,19 +67,19 @@ const GainKnob = () => {
         color="#FC5A96"
         background="#180094"
         radius={47.5} 
-        percentage={value / 100} // Refer to: https://github.com/eskimoblood/rc-knob/issues/20
+        percentage={value0To1} // Refer to: https://github.com/eskimoblood/rc-knob/issues/20
         />
         <Pointer 
         width={8}
         radius={35}
         type="circle"
         color="000000"
-        percentage={value / 100} // Refer to: https://github.com/eskimoblood/rc-knob/issues/20
+        percentage={value0To1} // Refer to: https://github.com/eskimoblood/rc-knob/issues/20
         />
         <Value 
         marginBottom={40} 
         className="value"
-        value={value} // Refer to: https://github.com/eskimoblood/rc-knob/issues/20
+        value={value0To1 * 100} // Refer to: https://github.com/eskimoblood/rc-knob/issues/20
         />
     </Knob>
   );
