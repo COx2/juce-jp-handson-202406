@@ -1,9 +1,6 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
-
-
-
 //==============================================================================
 AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAudioProcessor& p)
     : AudioProcessorEditor (&p)
@@ -13,26 +10,16 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     juce::ignoreUnused (processorRef);
 
     // Native view......
-    gainLabel.setText ("Gain", juce::dontSendNotification);
-    addAndMakeVisible (gainLabel);
+    genericEditor = std::make_unique<juce::GenericAudioProcessorEditor>(processorRef);
+    addAndMakeVisible(genericEditor.get());
 
-    addAndMakeVisible (gainSlider);
-    cppGainAttachment.reset (new SliderAttachment (valueTreeState, "gain", gainSlider));
-    
-    invertButton.setButtonText ("Invert Phase");
-    addAndMakeVisible (invertButton);
-    invertAttachment.reset (new ButtonAttachment (valueTreeState, "invertPhase", invertButton));
-
-    // Parameter binding.
-    valueTreeState.addParameterListener("gain", this);
-    valueTreeState.addParameterListener("invertPhase", this);
-
+    // Web view...
     webViewBackend = std::make_unique<WebViewBackendComponent>(processorRef);
     addAndMakeVisible(webViewBackend.get());
 
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
-    setSize (960, 480);
+    setSize (960, 600);
     setResizable(true, true);
 
     midiKeyboardStatePtr = processorRef.getMidiKeyboardState();
@@ -40,8 +27,6 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
 
 AudioPluginAudioProcessorEditor::~AudioPluginAudioProcessorEditor()
 {
-    valueTreeState.removeParameterListener("gain", this);
-    valueTreeState.removeParameterListener("invertPhase", this);
 }
 
 //==============================================================================
@@ -54,69 +39,9 @@ void AudioPluginAudioProcessorEditor::resized()
 {
     auto rect_ui = getLocalBounds();
 
-    auto gainRect = rect_ui.removeFromTop (200);
-    gainLabel .setBounds (gainRect.removeFromLeft (200));
-    gainSlider.setBounds (gainRect);
-
-    invertButton.setBounds (rect_ui.removeFromTop (200));
+    genericEditor->setBounds(getLocalBounds());
 
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
     webViewBackend->setBounds (getLocalBounds());
-}
-
-void AudioPluginAudioProcessorEditor::parameterChanged(const juce::String& parameterID, float newValue)
-{
-    juce::String javascript = "";
-
-    if (parameterID == "gain")
-    {
-        juce::DynamicObject::Ptr json = new juce::DynamicObject();
-        json->setProperty("parameterName", "gain");
-        json->setProperty("parameterValue", newValue);
-        const auto js_args_json = juce::JSON::toString(json.get());
-        javascript = juce::String ("onParameterChanged(") + js_args_json + juce::String (")");
-    }
-    else if (parameterID == "invertPhase")
-    {
-        juce::DynamicObject::Ptr json = new juce::DynamicObject();
-        json->setProperty("parameterName", "invertPhase");
-        json->setProperty("parameterValue", newValue);
-        const auto js_args_json = juce::JSON::toString(json.get());
-        javascript = juce::String ("onParameterChanged(") + js_args_json + juce::String (")");
-    }
-
-    if (javascript.isNotEmpty())
-    {
-        //if (juce::MessageManager::getInstance()->isThisTheMessageThread())
-        //{
-        //    const bool result = singlePageBrowser->evaluateJavascript (javascript.toStdString());
-        //    if (! result)
-        //    {
-        //        juce::Logger::outputDebugString ("Failed: " + javascript);
-        //    }
-        //}
-        //else
-        //{
-        //    juce::MessageManager::callAsync (
-        //        [safe_this = juce::Component::SafePointer (this), javascript]
-        //        {
-        //            if (safe_this.getComponent() == nullptr)
-        //            {
-        //                return;
-        //            }
-
-        //            const bool result = safe_this->singlePageBrowser->evaluateJavascript (javascript.toStdString());
-        //            if (! result)
-        //            {
-        //                juce::Logger::outputDebugString ("Failed: " + javascript);
-        //            }
-        //        });
-        //}
-    }
-}
-
-//==============================================================================
-void AudioPluginAudioProcessorEditor::timerCallback()
-{
 }

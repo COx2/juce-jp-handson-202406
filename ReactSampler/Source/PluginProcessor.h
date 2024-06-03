@@ -1,10 +1,13 @@
 #pragma once
 
 #include <juce_audio_processors/juce_audio_processors.h>
+#include <juce_gui_basics/juce_gui_basics.h>
 #include "JuceDemoSynthesizer.h"
 
 //==============================================================================
-class AudioPluginAudioProcessor final : public juce::AudioProcessor
+class AudioPluginAudioProcessor final
+    : public juce::AudioProcessor
+    , private juce::AudioProcessorValueTreeState::Listener
 {
 public:
     //==============================================================================
@@ -48,17 +51,24 @@ public:
 
     juce::AudioProcessorValueTreeState& getAPVTS() { return *parameters.get(); }
 
+    void openCustomSoundFileChooser();
+
 private:
     //==============================================================================
+    void parameterChanged(const juce::String& parameterID, float newValue) override;
+
     std::unique_ptr<juce::AudioProcessorValueTreeState> parameters;
     static juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
     float previousGain;
  
     std::atomic<float>* phaseParameter = nullptr;
     std::atomic<float>* gainParameter  = nullptr;
+    std::atomic<int> soundSelector;
 
-    std::unique_ptr<JuceDemoSynthesizer> juceDemoSynthesizer;
+    std::unique_ptr<JuceDemoSynthesizer> sineWaveSynthesizer;
+    std::unique_ptr<JuceDemoSynthesizer> customSamplerSynthesizer;
     std::shared_ptr<juce::MidiKeyboardState> midiKeyboardState;
+    std::unique_ptr<juce::FileChooser> soundFileChooser;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessor)
 };

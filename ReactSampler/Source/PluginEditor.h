@@ -8,9 +8,6 @@
 //==============================================================================
 class AudioPluginAudioProcessorEditor final
     : public juce::AudioProcessorEditor
-    , private juce::AudioProcessorValueTreeState::Listener
-    , private juce::ValueTree::Listener
-    , private juce::Timer
 {
 public:
     explicit AudioPluginAudioProcessorEditor (AudioPluginAudioProcessor&);
@@ -22,13 +19,6 @@ public:
 
 private:
     //==============================================================================
-    virtual void parameterChanged(const juce::String& parameterID, float newValue) override;
-
-    //==============================================================================
-    virtual void timerCallback() override;
-
-    // This reference is provided as a quick way for your editor to
-    // access the processor object that created it.
     AudioPluginAudioProcessor& processorRef;
 
     std::weak_ptr<juce::MidiKeyboardState> midiKeyboardStatePtr;
@@ -37,13 +27,8 @@ private:
     typedef juce::AudioProcessorValueTreeState::ButtonAttachment ButtonAttachment;
     
     juce::AudioProcessorValueTreeState& valueTreeState;
- 
-    juce::Label gainLabel;
-    juce::Slider gainSlider;
-    std::unique_ptr<SliderAttachment> cppGainAttachment;
- 
-    juce::ToggleButton invertButton;
-    std::unique_ptr<ButtonAttachment> invertAttachment;
+
+    std::unique_ptr<juce::GenericAudioProcessorEditor> genericEditor;
 
     std::unique_ptr<WebViewBackendComponent> webViewBackend;
     

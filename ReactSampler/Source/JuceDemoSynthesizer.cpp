@@ -126,22 +126,59 @@ private:
 //==============================================================================
 JuceDemoSynthesizer::JuceDemoSynthesizer()
 {
+    audioFormatManager.registerBasicFormats();
 }
 
 JuceDemoSynthesizer::~JuceDemoSynthesizer()
 {
 }
 
-void JuceDemoSynthesizer::initialise()
+void JuceDemoSynthesizer::loadSineWave()
 {
-    auto numVoices = 8;
+    clearVoices();
+    clearSounds();
+
+    const auto numVoices = 8;
 
     // Add some voices...
-    for (auto i = 0; i < numVoices; ++i)
+    for (int i = 0; i < numVoices; ++i)
     {
-        addVoice (new SineWaveVoice());
+        addVoice(new SineWaveVoice());
     }
 
     // ..and give the synth a sound to play
-    addSound (new SineWaveSound());
+    addSound(new SineWaveSound());
+}
+
+void JuceDemoSynthesizer::loadAudioSample(std::unique_ptr<juce::InputStream> audioFileStream)
+{
+    audioFormatReader.reset(audioFormatManager.createReaderFor(std::move(audioFileStream)));
+    if (audioFormatReader.get() != nullptr)
+    {
+        clearVoices();
+        clearSounds();
+
+        // Monophonic
+        addVoice(new juce::SamplerVoice());
+        
+#if 0
+        const auto numVoices = 8;
+        // Polyphonic
+        for (int i = 0; i < numVoices; i++) {
+            addVoice(new juce::SamplerVoice());
+        }
+#endif
+
+        // ..and give the synth a sound to play
+        juce::BigInteger allNotes;
+        allNotes.setRange(0, 128, true);
+
+        addSound(new juce::SamplerSound("default", *audioFormatReader.get(), allNotes, 60, 0, 0.1, 10.0));
+    }
+
+}
+
+juce::String JuceDemoSynthesizer::getWildCardFilter() const
+{
+    return audioFormatManager.getWildcardForAllFormats();
 }

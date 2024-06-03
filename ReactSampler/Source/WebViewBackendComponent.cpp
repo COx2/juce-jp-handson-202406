@@ -138,6 +138,10 @@ WebViewBackendComponent::WebViewBackendComponent(AudioPluginAudioProcessor& proc
         *processorRef.getAPVTS().getParameter("gain"),
         gainSliderRelay,
         processorRef.getAPVTS().undoManager)
+    , soundSelectorAttachment(
+        *processorRef.getAPVTS().getParameter("soundSelector"),
+        soundSelectorRelay,
+        processorRef.getAPVTS().undoManager)
     , midiKeyboardStatePtr(processorRef.getMidiKeyboardState())
 {
     addAndMakeVisible(webComponent);

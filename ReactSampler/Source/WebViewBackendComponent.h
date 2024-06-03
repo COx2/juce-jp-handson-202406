@@ -24,7 +24,6 @@ private:
     //==============================================================================
     std::optional<juce::WebBrowserComponent::Resource> getResource(const juce::String& url);
 
-
     //==============================================================================
     AudioPluginAudioProcessor& processorRef;
 
@@ -32,6 +31,7 @@ private:
     std::unique_ptr<juce::ZipFile> zipWebViewBundle;
 
     juce::WebSliderRelay gainSliderRelay{ webComponent, "gainSlider" };
+    juce::WebComboBoxRelay soundSelectorRelay{ webComponent, "soundSelector" };
 
     SinglePageBrowser webComponent{ 
         juce::WebBrowserComponent::Options{}
@@ -40,6 +40,7 @@ private:
         .withUserDataFolder(juce::File::getSpecialLocation(juce::File::SpecialLocationType::tempDirectory)))
         .withNativeIntegrationEnabled()
         .withOptionsFrom(gainSliderRelay)
+        .withOptionsFrom(soundSelectorRelay)
         .withNativeFunction("onMidiNoteOn", 
             [safe_this = juce::Component::SafePointer(this)]
             (const juce::Array<juce::var>& args, std::function<void(juce::var)> complete)
@@ -84,6 +85,22 @@ private:
                 complete(juce::var(0));
                 return;
             })
+        .withNativeFunction("onLoadCustomSound",
+            [safe_this = juce::Component::SafePointer(this)]
+            (const juce::Array<juce::var>& args, std::function<void(juce::var)> complete)
+            -> void
+            {
+                if (safe_this.getComponent() == nullptr)
+                {
+                    complete(juce::var(-1));
+                    return;
+                }
+                
+                safe_this->processorRef.openCustomSoundFileChooser();
+
+                complete(juce::var(0));
+                return;
+            })
         .withResourceProvider([this](const auto& url)
         {
             return getResource(url);
@@ -92,6 +109,7 @@ private:
     };
 
     juce::WebSliderParameterAttachment gainAttachment;
+    juce::WebComboBoxParameterAttachment soundSelectorAttachment;
 
     std::weak_ptr<juce::MidiKeyboardState> midiKeyboardStatePtr;
 
