@@ -1,6 +1,6 @@
-project(ReactSampler VERSION 0.0.1)
+project(ReactInstrument VERSION 0.1.0)
 
-set (BaseTargetName ReactSampler)
+set (BaseTargetName ReactInstrument)
 
 juce_add_plugin("${BaseTargetName}"
     # VERSION ...
@@ -16,14 +16,14 @@ juce_add_plugin("${BaseTargetName}"
     EDITOR_WANTS_KEYBOARD_FOCUS FALSE
     COPY_PLUGIN_AFTER_BUILD FALSE
     PLUGIN_MANUFACTURER_CODE Cox2
-    PLUGIN_CODE Rcts
+    PLUGIN_CODE Rcti
     FORMATS Standalone VST3 AU #AUv3 #LV2
-    LV2URI "urn:cox2:ReactSampler"
-    PRODUCT_NAME "ReactSampler")
+    LV2URI "urn:cox2:ReactInstrument"
+    PRODUCT_NAME "ReactInstrument")
 
 clap_juce_extensions_plugin(TARGET "${BaseTargetName}"
-    CLAP_ID "com.cox2.reactsampler"
-    CLAP_FEATURES instrument "sampler" gritty basses leads pads)
+    CLAP_ID "com.cox2.reactinstrument"
+    CLAP_FEATURES instrument "sampler" basses leads pads)
 
 juce_add_binary_data("${BaseTargetName}_WebViewBundle"
     HEADER_NAME "WebViewBundleData.h"
@@ -79,49 +79,55 @@ message(STATUS "[${BaseTargetName}] Binary directory: ${CMAKE_CURRENT_BINARY_DIR
 # Add cmake install task for this project.
 if(TARGET ${BaseTargetName}_VST3)
     get_target_property(VST3_PRODUCT_FILE ${BaseTargetName}_VST3 JUCE_PLUGIN_ARTEFACT_FILE)
-    message("VST3_PRODUCT_FILE: ${VST3_PRODUCT_FILE}")
+    
+    message("[${BaseTargetName}] VST3_PRODUCT_FILE: ${VST3_PRODUCT_FILE}")
 
     if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
-
         install(FILES "${VST3_PRODUCT_FILE}"
                 DESTINATION "/Library/Audio/Plug-Ins/VST3"
                 COMPONENT ${BaseTargetName}_VST3)
-
     elseif(CMAKE_SYSTEM_NAME STREQUAL "Windows")
-
         install(FILES "${VST3_PRODUCT_FILE}"
                 DESTINATION "C:/Program Files/Common Files/VST3"
                 COMPONENT ${BaseTargetName}_VST3)
-
     elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-
         install(FILES "${VST3_PRODUCT_FILE}"
                 DESTINATION "/usr/lib/vst3"
                 COMPONENT ${BaseTargetName}_VST3)
-
     endif()
+
+endif()
+
+if(TARGET ${BaseTargetName}_AU)
+    get_target_property(AU_PRODUCT_FILE ${BaseTargetName}_AU JUCE_PLUGIN_ARTEFACT_FILE)
+
+    message("[${BaseTargetName}] AU_PRODUCT_FILE: ${AU_PRODUCT_FILE}")
+
+    if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+        install(FILES "${AU_PRODUCT_FILE}"
+                DESTINATION "/Library/Audio/Plug-Ins/Components"
+                COMPONENT ${BaseTargetName}_AU)
+    endif()
+
 endif()
 
 if(TARGET ${BaseTargetName}_CLAP)
     get_target_property(CLAP_PRODUCT_FILE ${BaseTargetName}_CLAP JUCE_PLUGIN_ARTEFACT_FILE)
-    message("CLAP_PRODUCT_FILE: ${CLAP_PRODUCT_FILE}")
+
+    message("[${BaseTargetName}] CLAP_PRODUCT_FILE: ${CLAP_PRODUCT_FILE}")
 
     if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
-
         install(FILES "${CLAP_PRODUCT_FILE}"
                 DESTINATION "/Library/Audio/Plug-Ins/CLAP"
                 COMPONENT ${BaseTargetName}_CLAP)
-
     elseif(CMAKE_SYSTEM_NAME STREQUAL "Windows")
-
         install(FILES "${CLAP_PRODUCT_FILE}"
                 DESTINATION "C:/Program Files/Common Files/CLAP"
                 COMPONENT ${BaseTargetName}_CLAP)
-
     elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-
-        install(FILES "${VST3_PRODUCT_FILE}"
+        install(FILES "${CLAP_PRODUCT_FILE}"
                 DESTINATION "/usr/lib/clap"
                 COMPONENT ${BaseTargetName}_CLAP)
     endif()
+
 endif()

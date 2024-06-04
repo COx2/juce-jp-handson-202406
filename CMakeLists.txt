@@ -52,4 +52,4 @@ find_package(juce REQUIRED)
 find_package(clap-juce-extensions REQUIRED)
 
 # Add plugin project
-add_subdirectory(ReactSampler)
+add_subdirectory(ReactInstrument)
