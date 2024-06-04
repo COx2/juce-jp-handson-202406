@@ -4,7 +4,7 @@ set SCRIPT_DIRECTORY=%~dp0
 cd "%SCRIPT_DIRECTORY%\.."
 
 echo "Install Release version..."
-cmake --install %SCRIPT_DIRECTORY%/../builds/vs2022 --prefix Release --component ReactSampler_VST3
+cmake --install %SCRIPT_DIRECTORY%/../builds/vs2022 --prefix Release --component ReactInstrument_VST3
 
 exit /b 0
 
