@@ -158,12 +158,12 @@ void JuceDemoSynthesizer::loadAudioSample(std::unique_ptr<juce::InputStream> aud
         clearVoices();
         clearSounds();
 
-        // Monophonic
-        addVoice(new juce::SamplerVoice());
-        
 #if 0
-        const auto numVoices = 8;
+        // Monophonic
+        //addVoice(new juce::SamplerVoice());
+#else
         // Polyphonic
+        const auto numVoices = 8;
         for (int i = 0; i < numVoices; i++) {
             addVoice(new juce::SamplerVoice());
         }
