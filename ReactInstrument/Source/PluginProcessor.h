@@ -7,6 +7,7 @@
 //==============================================================================
 class AudioPluginAudioProcessor final
     : public juce::AudioProcessor
+    , private juce::Value::Listener
 {
 public:
     //==============================================================================
@@ -51,10 +52,12 @@ public:
 
     //==============================================================================
     juce::String getSamplerSupportedFormatWildcard() const;
-    void loadCustomSound(const juce::File& fileToLoad);
+    void loadCustomSoundFile(const juce::File& fileToLoad);
 
 private:
     //==============================================================================
+    void valueChanged(juce::Value& value) override;
+
     static juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
     std::unique_ptr<juce::AudioProcessorValueTreeState> parameters;
 
@@ -66,6 +69,8 @@ private:
     std::atomic<float>* gainParameter = nullptr;
     std::atomic<float>* phaseParameter = nullptr;
     std::atomic<float>* soundSelectorParameter = nullptr;
+
+    juce::Value customSoundFilePath;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessor)
 };

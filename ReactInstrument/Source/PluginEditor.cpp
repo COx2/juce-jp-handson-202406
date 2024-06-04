@@ -70,7 +70,7 @@ void AudioPluginAudioProcessorEditor::openCustomSoundFileChooser()
 
             if (sound_file.existsAsFile())
             {
-                safe_this->processorRef.loadCustomSound(sound_file);
+                safe_this->processorRef.loadCustomSoundFile(sound_file);
             }
         });
 }

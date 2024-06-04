@@ -11,6 +11,7 @@ AudioPluginAudioProcessor::AudioPluginAudioProcessor()
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
                        )
+    , customSoundFilePath(juce::var(""))
 {
     sineWaveSynthesizer = std::make_unique<JuceDemoSynthesizer>();
     sineWaveSynthesizer->loadSineWave();
@@ -19,15 +20,22 @@ AudioPluginAudioProcessor::AudioPluginAudioProcessor()
 
     midiKeyboardState = std::make_shared<juce::MidiKeyboardState>();
 
-    parameters = std::make_unique<juce::AudioProcessorValueTreeState>(*this, nullptr, juce::Identifier ("APVTSTutorial"), createParameterLayout());
+    parameters = std::make_unique<juce::AudioProcessorValueTreeState>(
+        *this, 
+        nullptr, 
+        juce::Identifier ("PluginParameters"),
+        createParameterLayout());
     
     phaseParameter = parameters->getRawParameterValue ("invertPhase");
     gainParameter  = parameters->getRawParameterValue ("gain");
     soundSelectorParameter = parameters->getRawParameterValue("soundSelector");
+
+    customSoundFilePath.addListener(this);
 }
 
 AudioPluginAudioProcessor::~AudioPluginAudioProcessor()
 {
+    customSoundFilePath.removeListener(this);
 }
 
 //==============================================================================
@@ -217,9 +225,18 @@ void AudioPluginAudioProcessor::getStateInformation (juce::MemoryBlock& destData
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
     juce::ignoreUnused (destData);
-    
-    auto state = parameters->copyState();
-    std::unique_ptr<juce::XmlElement> xml (state.createXml());
+
+    auto xml = std::make_unique<juce::XmlElement>("ReactInstrument");
+    {
+        auto state = parameters->copyState();
+        xml->addChildElement(state.createXml().release());
+    }
+    {
+        auto state = std::make_unique<juce::XmlElement>("SamplerSettings");
+        state->setAttribute("CustomSoundFilePath", customSoundFilePath.toString());
+        xml->addChildElement(state.release());
+    }
+    juce::Logger::outputDebugString(xml->toString());
     copyXmlToBinary (*xml, destData);
 }
 
@@ -231,9 +248,19 @@ void AudioPluginAudioProcessor::setStateInformation (const void* data, int sizeI
     
     std::unique_ptr<juce::XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
 
-    if (xmlState.get() != nullptr)
-        if (xmlState->hasTagName (parameters->state.getType()))
-            parameters->replaceState (juce::ValueTree::fromXml (*xmlState));
+    if (xmlState.get() != nullptr && xmlState->hasTagName("ReactInstrument"))
+    {
+        if (const auto* xml_params = xmlState->getChildByName(parameters->state.getType()))
+        {
+            parameters->replaceState (juce::ValueTree::fromXml (*xml_params));
+        }
+
+        if (const auto * xml_sampler = xmlState->getChildByName("SamplerSettings"))
+        {
+            const auto value = xml_sampler->getStringAttribute("CustomSoundFilePath");
+            customSoundFilePath = value;
+        }
+    }
 }
 
 //==============================================================================
@@ -247,9 +274,21 @@ juce::String AudioPluginAudioProcessor::getSamplerSupportedFormatWildcard() cons
     return customSamplerSynthesizer->getWildCardFilter();
 }
 
-void AudioPluginAudioProcessor::loadCustomSound(const juce::File& fileToLoad)
+void AudioPluginAudioProcessor::loadCustomSoundFile(const juce::File& fileToLoad)
 {
-    customSamplerSynthesizer->loadAudioSample(fileToLoad.createInputStream());
+    customSoundFilePath = fileToLoad.getFullPathName();
+}
+
+void AudioPluginAudioProcessor::valueChanged(juce::Value& value)
+{
+    if (value.refersToSameSourceAs(customSoundFilePath))
+    {
+        juce::File file_to_load = juce::File(customSoundFilePath.toString());
+        if (file_to_load.existsAsFile())
+        {
+            customSamplerSynthesizer->loadAudioSample(file_to_load.createInputStream());
+        }
+    }
 }
 
 //==============================================================================
