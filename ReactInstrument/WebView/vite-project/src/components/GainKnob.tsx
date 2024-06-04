@@ -52,7 +52,7 @@ const GainKnob = () => {
 
   return (
     <Knob 
-      size={100}  
+      size={110}  
       angleOffset={220} 
       angleRange={280}
       min={0}

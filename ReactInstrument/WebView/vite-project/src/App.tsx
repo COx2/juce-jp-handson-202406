@@ -16,10 +16,10 @@ function App() {
           <div className="control-label">
             SOUND
           </div>
-          <div>
+          <div className="control-element">
             <SoundSelector/>
           </div>
-          <div>
+          <div className="control-element">
             <LoadSampleButton text="Load Custom Sound"/>
           </div>
         </div>
