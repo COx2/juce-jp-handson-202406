@@ -2,8 +2,11 @@
 
 #include <juce_gui_extra/juce_gui_extra.h>
 #include <juce_data_structures/juce_data_structures.h>
+#include <juce_audio_utils/juce_audio_utils.h>
 #include "PluginProcessor.h"
-#include "WebViewBackendComponent.h"
+
+// Forward declaration
+class WebViewBackendComponent;
 
 //==============================================================================
 class AudioPluginAudioProcessorEditor final
@@ -14,23 +17,24 @@ public:
     ~AudioPluginAudioProcessorEditor() override;
 
     //==============================================================================
-    void paint (juce::Graphics&) override;
-    void resized() override;
+    void openCustomSoundFileChooser();
 
 private:
     //==============================================================================
+    void paint (juce::Graphics&) override;
+    void resized() override;
+
+    //==============================================================================
     AudioPluginAudioProcessor& processorRef;
 
-    std::weak_ptr<juce::MidiKeyboardState> midiKeyboardStatePtr;
-
-    typedef juce::AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
-    typedef juce::AudioProcessorValueTreeState::ButtonAttachment ButtonAttachment;
-    
-    juce::AudioProcessorValueTreeState& valueTreeState;
-
     std::unique_ptr<juce::GenericAudioProcessorEditor> genericEditor;
-
     std::unique_ptr<WebViewBackendComponent> webViewBackend;
+    
+    std::shared_ptr<juce::MidiKeyboardState> midiKeyboardStatePtr;
+    std::unique_ptr<juce::MidiKeyboardComponent> midiKeyboardComponent;
+
+    std::unique_ptr<juce::TextButton> buttonCustomSound;
+    std::unique_ptr<juce::FileChooser> soundFileChooser;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessorEditor)
 };

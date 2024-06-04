@@ -3,6 +3,7 @@
 #include <juce_gui_extra/juce_gui_extra.h>
 #include "SinglePageBrowser.h"
 #include "PluginProcessor.h"
+#include "PluginEditor.h"
 
 //==============================================================================
 class WebViewBackendComponent
@@ -10,7 +11,7 @@ class WebViewBackendComponent
     , private juce::Timer
 {
 public:
-    explicit WebViewBackendComponent(AudioPluginAudioProcessor& processor);
+    explicit WebViewBackendComponent(AudioPluginAudioProcessor& processor, AudioPluginAudioProcessorEditor& editorRoot);
     ~WebViewBackendComponent() override;
 
 private:
@@ -26,6 +27,7 @@ private:
 
     //==============================================================================
     AudioPluginAudioProcessor& processorRef;
+    AudioPluginAudioProcessorEditor& editorRootRef;
 
     juce::MemoryInputStream misWebViewBundle;
     std::unique_ptr<juce::ZipFile> zipWebViewBundle;
@@ -96,7 +98,7 @@ private:
                     return;
                 }
                 
-                safe_this->processorRef.openCustomSoundFileChooser();
+                safe_this->editorRootRef.openCustomSoundFileChooser();
 
                 complete(juce::var(0));
                 return;

@@ -7,7 +7,6 @@
 //==============================================================================
 class AudioPluginAudioProcessor final
     : public juce::AudioProcessor
-    , private juce::AudioProcessorValueTreeState::Listener
 {
 public:
     //==============================================================================
@@ -48,27 +47,25 @@ public:
 
     //==============================================================================
     std::shared_ptr<juce::MidiKeyboardState> getMidiKeyboardState() const;
-
     juce::AudioProcessorValueTreeState& getAPVTS() { return *parameters.get(); }
 
-    void openCustomSoundFileChooser();
+    //==============================================================================
+    juce::String getSamplerSupportedFormatWildcard() const;
+    void loadCustomSound(const juce::File& fileToLoad);
 
 private:
     //==============================================================================
-    void parameterChanged(const juce::String& parameterID, float newValue) override;
-
-    std::unique_ptr<juce::AudioProcessorValueTreeState> parameters;
     static juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
-    float previousGain;
- 
-    std::atomic<float>* phaseParameter = nullptr;
-    std::atomic<float>* gainParameter  = nullptr;
-    std::atomic<int> soundSelector;
+    std::unique_ptr<juce::AudioProcessorValueTreeState> parameters;
 
     std::unique_ptr<JuceDemoSynthesizer> sineWaveSynthesizer;
     std::unique_ptr<JuceDemoSynthesizer> customSamplerSynthesizer;
     std::shared_ptr<juce::MidiKeyboardState> midiKeyboardState;
-    std::unique_ptr<juce::FileChooser> soundFileChooser;
+
+    float previousGain;
+    std::atomic<float>* gainParameter = nullptr;
+    std::atomic<float>* phaseParameter = nullptr;
+    std::atomic<float>* soundSelectorParameter = nullptr;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessor)
 };

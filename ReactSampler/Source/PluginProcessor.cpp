@@ -12,26 +12,22 @@ AudioPluginAudioProcessor::AudioPluginAudioProcessor()
                      #endif
                        )
 {
-    soundSelector = 0;
-
-    parameters = std::make_unique<juce::AudioProcessorValueTreeState>(*this, nullptr, juce::Identifier ("APVTSTutorial"), createParameterLayout());
-    
-    phaseParameter = parameters->getRawParameterValue ("invertPhase");
-    gainParameter  = parameters->getRawParameterValue ("gain");
-
-    parameters->addParameterListener("soundSelector", this);
-
     sineWaveSynthesizer = std::make_unique<JuceDemoSynthesizer>();
     sineWaveSynthesizer->loadSineWave();
 
     customSamplerSynthesizer = std::make_unique<JuceDemoSynthesizer>();
 
     midiKeyboardState = std::make_shared<juce::MidiKeyboardState>();
+
+    parameters = std::make_unique<juce::AudioProcessorValueTreeState>(*this, nullptr, juce::Identifier ("APVTSTutorial"), createParameterLayout());
+    
+    phaseParameter = parameters->getRawParameterValue ("invertPhase");
+    gainParameter  = parameters->getRawParameterValue ("gain");
+    soundSelectorParameter = parameters->getRawParameterValue("soundSelector");
 }
 
 AudioPluginAudioProcessor::~AudioPluginAudioProcessor()
 {
-    parameters->removeParameterListener("soundSelector", this);
 }
 
 //==============================================================================
@@ -181,11 +177,11 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     sineWaveSynthesizer->renderNextBlock(buffer_sine_wave, midiMessages, 0, buffer_sine_wave.getNumSamples());
     customSamplerSynthesizer->renderNextBlock(buffer_csutom_sampler, midiMessages, 0, buffer_csutom_sampler.getNumSamples());
 
-    if (soundSelector == 0)
+    if ((int)*soundSelectorParameter == 0)
     {
         buffer = buffer_sine_wave;
     }
-    else if (soundSelector == 1)
+    else if ((int)*soundSelectorParameter == 1)
     {
         buffer = buffer_csutom_sampler;
     }
@@ -246,53 +242,14 @@ std::shared_ptr<juce::MidiKeyboardState> AudioPluginAudioProcessor::getMidiKeybo
     return midiKeyboardState;
 }
 
-void AudioPluginAudioProcessor::openCustomSoundFileChooser()
+juce::String AudioPluginAudioProcessor::getSamplerSupportedFormatWildcard() const
 {
-    juce::String message = "Please select a custom sound file.";
-    juce::String wild_card = customSamplerSynthesizer->getWildCardFilter();
-
-    auto safe_editor = juce::Component::SafePointer(getActiveEditor());
-
-    soundFileChooser = std::make_unique<juce::FileChooser>(message,
-        juce::File(),
-        wild_card,
-        true,
-        false,
-        safe_editor);
-
-    soundFileChooser->launchAsync(juce::FileBrowserComponent::openMode | juce::FileBrowserComponent::canSelectFiles,
-        [safe_editor, this](const juce::FileChooser& chooser)
-        {
-            if (safe_editor.getComponent() == nullptr)
-            {
-                return;
-            }
-
-            const juce::File sound_file = chooser.getResult();
-            juce::Logger::outputDebugString(sound_file.getFullPathName());
-
-            if (sound_file.existsAsFile())
-            {
-                customSamplerSynthesizer->loadAudioSample(sound_file.createInputStream());
-            }
-        });
+    return customSamplerSynthesizer->getWildCardFilter();
 }
 
-void AudioPluginAudioProcessor::parameterChanged(const juce::String& parameterID, float newValue)
+void AudioPluginAudioProcessor::loadCustomSound(const juce::File& fileToLoad)
 {
-    if (parameterID == "soundSelector")
-    {
-        auto value = dynamic_cast<juce::AudioParameterChoice*>(parameters->getParameter(parameterID))->getCurrentValueAsText();
-
-        if (value == "Sine Wave")
-        {
-            soundSelector = 0;
-        }
-        else if (value == "Custom Sampler")
-        {
-            soundSelector = 1;
-        }
-    }
+    customSamplerSynthesizer->loadAudioSample(fileToLoad.createInputStream());
 }
 
 //==============================================================================

@@ -2,7 +2,7 @@
 #include "WebViewBundleData.h"
 
 #ifndef WEB_VIEW_FROM_DEV_SERVER
-#define WEB_VIEW_FROM_DEV_SERVER 1
+#define WEB_VIEW_FROM_DEV_SERVER 0
 #endif
 
 namespace
@@ -130,10 +130,11 @@ std::optional<juce::WebBrowserComponent::Resource> WebViewBackendComponent::getR
     return std::nullopt;
 }
 
-WebViewBackendComponent::WebViewBackendComponent(AudioPluginAudioProcessor& processor)
+WebViewBackendComponent::WebViewBackendComponent(AudioPluginAudioProcessor& processor, AudioPluginAudioProcessorEditor& editorRoot)
     : misWebViewBundle(WebView::WebViewBundle_zip, WebView::WebViewBundle_zipSize, false)
     , zipWebViewBundle(std::make_unique<juce::ZipFile>(misWebViewBundle))
     , processorRef(processor)
+    , editorRootRef(editorRoot)
     , gainAttachment(
         *processorRef.getAPVTS().getParameter("gain"),
         gainSliderRelay,
