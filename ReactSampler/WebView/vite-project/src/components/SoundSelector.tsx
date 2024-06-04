@@ -36,6 +36,7 @@ const SoundSelector  = () => {
   return (
     <Select 
         defaultValue={options[choiceIndex]}
+        value={options[choiceIndex]}
         onChange={handleChange}
         options={options}
         isSearchable={false}

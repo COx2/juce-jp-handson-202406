@@ -11,16 +11,7 @@ import './App.css'
 function App() {
   return (
     <>
-      <h1>React Sampler</h1>
       <div className="control-panel">
-        <div className="control-block">
-          <div className="control-label">
-            GAIN
-          </div>
-          <div className="force-centering">
-            <GainKnob/>
-          </div>
-        </div>
         <div className="control-block">
           <div className="control-label">
             SOUND
@@ -30,6 +21,14 @@ function App() {
           </div>
           <div>
             <LoadSampleButton text="Load Custom Sound"/>
+          </div>
+        </div>
+        <div className="control-block">
+          <div className="control-label">
+            GAIN
+          </div>
+          <div className="force-centering">
+            <GainKnob/>
           </div>
         </div>
       </div>
