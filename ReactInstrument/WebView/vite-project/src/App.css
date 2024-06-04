@@ -5,6 +5,27 @@
   text-align: center;
 }
 
+.r3f-box {
+  position: fixed;
+  top: 0%;
+  left: 0%;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.control-box {
+  /* border: solid; */
+  background-color: rgba(240, 248, 255, 0.347);
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 800px;
+  height: 300px;
+  padding: 3%;
+  z-index: 100;
+}
+
 .control-panel {
   /* border: solid; */
   background-color: aliceblue;
