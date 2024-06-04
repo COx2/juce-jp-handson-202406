@@ -35,7 +35,7 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
 
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
-    setSize (960, 480);
+    setSize (960, 420);
     setResizable(true, true);
 }
 
@@ -83,15 +83,24 @@ void AudioPluginAudioProcessorEditor::paint (juce::Graphics& g)
 
 void AudioPluginAudioProcessorEditor::resized()
 {
-    auto rect_ui = getLocalBounds();
-    const auto height_generic = rect_ui.getHeight() * 0.65f;
-    const auto height_button = rect_ui.getHeight() * 0.15f;
-    genericEditor->setBounds(rect_ui.removeFromTop(height_generic));
-    buttonCustomSound->setBounds(rect_ui.removeFromTop(height_button)
-        .withSizeKeepingCentre(rect_ui.getWidth() * 0.65f, height_button * 0.75f));
-    midiKeyboardComponent->setBounds(rect_ui);
-
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
-    webViewBackend->setBounds (getLocalBounds());
+
+    auto rect_ui = getLocalBounds();
+
+#if 0
+    auto rect_juce_ui = rect_ui.removeFromRight(rect_ui.getWidth() * 0.5f);
+    {
+        const auto height_generic = rect_juce_ui.getHeight() * 0.65f;
+        const auto height_button = rect_juce_ui.getHeight() * 0.15f;
+        genericEditor->setBounds(rect_juce_ui.removeFromTop(height_generic));
+        buttonCustomSound->setBounds(rect_juce_ui.removeFromTop(height_button)
+            .withSizeKeepingCentre(rect_juce_ui.getWidth() * 0.65f, height_button * 0.75f));
+        midiKeyboardComponent->setBounds(rect_juce_ui);
+    }
+#endif
+
+    auto rect_web_ui = rect_ui;
+
+    webViewBackend->setBounds (rect_web_ui);
 }

@@ -2,7 +2,7 @@
 #include "WebViewBundleData.h"
 
 #ifndef WEB_VIEW_FROM_DEV_SERVER
-#define WEB_VIEW_FROM_DEV_SERVER 0
+#define WEB_VIEW_FROM_DEV_SERVER 1
 #endif
 
 namespace
@@ -94,38 +94,6 @@ std::optional<juce::WebBrowserComponent::Resource> WebViewBackendComponent::getR
             juce::String { "text/html" }
         };
     }
-
-    if (urlToRetrive == "data.txt")
-    {
-        juce::WebBrowserComponent::Resource resource;
-        static constexpr char testData[] = "testdata";
-        juce::MemoryInputStream stream{ testData, juce::numElementsInArray(testData) - 1, false };
-
-        return juce::WebBrowserComponent::Resource{
-            streamToVector(stream),
-            juce::String { "text/html" }
-        };
-    }
-
-    //if (urlToRetrive == "spectrumData.json")
-    //{
-    //    juce::Array<juce::var> frames;
-
-    //    for (const auto& frame : spectrumDataFrames)
-    //        frames.add(frame);
-
-    //    juce::DynamicObject::Ptr d(new juce::DynamicObject());
-    //    d->setProperty("timeResolutionMs", getTimerInterval());
-    //    d->setProperty("frames", std::move(frames));
-
-    //    const auto s = juce::JSON::toString(d.get());
-    //    juce::MemoryInputStream stream{ s.getCharPointer(), s.getNumBytesAsUTF8(), false };
-
-    //    return juce::WebBrowserComponent::Resource{
-    //        streamToVector(stream),
-    //        juce::String { "application/json" }
-    //    };
-    //}
 
     return std::nullopt;
 }
