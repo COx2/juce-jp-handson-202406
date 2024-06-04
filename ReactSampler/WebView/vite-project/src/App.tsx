@@ -12,21 +12,26 @@ function App() {
   return (
     <>
       <h1>React Sampler</h1>
-      <div style={{display: 'flex', flexDirection: 'column', justifyContent:'center', alignItems:'center'}}>
-          <div style={{marginTop: '-10px'}}><GainKnob/></div>
-          <div style={{marginTop: '-10px'}}>GAIN</div>
-          <div style={{margin: '10px', padding: 0}}></div>
-      </div>
-      <div style={{display: 'flex', flexDirection: 'column', alignItems:'center'}}>
-          <div style={{marginBottom: '10px'}}>SOUND</div>
-          <div style={{display: 'flex', justifyContent:'center', marginBottom: '20px'}}>
-            <div style={{minWidth: '180px', marginRight: '10px'}}>
-              <SoundSelector/>
-            </div>
-            <div style={{minWidth: '180px', marginLeft: '10px'}}>
-              <LoadSampleButton text="Load Sample"/>
-            </div>
+      <div className="control-panel">
+        <div className="control-block">
+          <div className="control-label">
+            GAIN
           </div>
+          <div className="force-centering">
+            <GainKnob/>
+          </div>
+        </div>
+        <div className="control-block">
+          <div className="control-label">
+            SOUND
+          </div>
+          <div>
+            <SoundSelector/>
+          </div>
+          <div>
+            <LoadSampleButton text="Load Custom Sound"/>
+          </div>
+        </div>
       </div>
       <div>
         <MidiKeyboard/>

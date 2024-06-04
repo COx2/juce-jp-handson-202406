@@ -10,7 +10,7 @@ const LoadSampleButton = (props: any) => {
         <Button
         variant="contained"
         sx={{
-            width: '180px'
+            width: '240px'
         }}
         onClick={() => {
             onButtonClicked(props.native_message);

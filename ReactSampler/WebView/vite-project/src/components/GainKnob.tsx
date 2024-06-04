@@ -52,15 +52,15 @@ const GainKnob = () => {
 
   return (
     <Knob 
-    size={100}  
-    angleOffset={220} 
-    angleRange={280}
-    min={0}
-    max={100}
-    // @ts-ignore
-    onChange={value => {
-        handleChange("changed", value / 100)
-    }}
+      size={100}  
+      angleOffset={220} 
+      angleRange={280}
+      min={0}
+      max={100}
+      // @ts-ignore
+      onChange={value => {
+          handleChange("changed", value / 100)
+      }}
     >
         <Arc 
         arcWidth={8}
