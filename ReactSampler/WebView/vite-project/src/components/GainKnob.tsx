@@ -64,8 +64,8 @@ const GainKnob = () => {
     >
         <Arc 
         arcWidth={8}
-        color="#FC5A96"
-        background="#180094"
+        background="#D9D9D9"
+        color="#4D4D9D"
         radius={47.5} 
         percentage={value0To1} // Refer to: https://github.com/eskimoblood/rc-knob/issues/20
         />
@@ -73,7 +73,7 @@ const GainKnob = () => {
         width={8}
         radius={35}
         type="circle"
-        color="000000"
+        color="#3d4244"
         percentage={value0To1} // Refer to: https://github.com/eskimoblood/rc-knob/issues/20
         />
         <Value 
