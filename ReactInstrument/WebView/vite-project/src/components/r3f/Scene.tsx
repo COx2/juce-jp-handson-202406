@@ -6,6 +6,7 @@ import { Cube } from './Cube';
 import { Sphere } from './Sphere';
 import { Cone } from './Cone';
 import { Torus } from './Torus'
+// @ts-ignore
 import { Perf } from 'r3f-perf'
 
 export const R3FScene: FC = () => {
@@ -25,10 +26,18 @@ export const R3FScene: FC = () => {
         attach="background"
         args={[bgColor.r, bgColor.g, bgColor.b]}
       />
-      <Cube position={[-2.2, 1.2, -1.0]}/>
-      <Sphere position={[2.2, 1.2, -1.0]}/>
-      <Cone position={[-2.2, -1.2, -1.0]}/>
-      <Torus position={[2.2, -1.2, -1.0]}/>
+      <Cube 
+      // @ts-ignore
+      position={[-2.2, 1.2, -1.0]}/>
+      <Sphere 
+      // @ts-ignore
+      position={[2.2, 1.2, -1.0]}/>
+      <Cone
+      // @ts-ignore
+      position={[-2.2, -1.2, -1.0]}/>
+      <Torus
+      // @ts-ignore
+      position={[2.2, -1.2, -1.0]}/>
       <OrbitControls />
       <ambientLight args={[0xffffff]} intensity={0.2} />
       <directionalLight position={[0.3, 0.4, 1]} intensity={0.8} />

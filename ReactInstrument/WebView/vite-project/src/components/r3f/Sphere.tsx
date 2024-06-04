@@ -2,7 +2,7 @@ import { useFrame } from '@react-three/fiber';
 import { FC, useRef, useState } from 'react';
 import type { Mesh } from 'three';
 
-export const Sphere: FC = (props) => {
+export const Sphere: FC = (props: any) => {
     // Set up state for the hovered and active state
     const [hovered, setHover] = useState(false)
     const [active, setActive] = useState(false)
@@ -26,9 +26,9 @@ export const Sphere: FC = (props) => {
             {...props}
             ref={cubeRef}
             scale={active ? scale : 1.0}
-            onClick={(event) => setActive(!active)}
-            onPointerOver={(event) => setHover(true)}
-            onPointerOut={(event) => setHover(false)}
+            onClick={() => setActive(!active)}
+            onPointerOver={() => setHover(true)}
+            onPointerOut={() => setHover(false)}
             >
             <sphereGeometry />
             <meshStandardMaterial color={hovered ? 'yellow' : 'lightblue'} />
