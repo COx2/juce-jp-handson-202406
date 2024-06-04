@@ -1,5 +1,5 @@
 // @ts-ignore
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import MidiKeyboard from './components/MidiKeyboard.tsx'
 import GainKnob from './components/GainKnob.tsx'
 import SoundSelector from './components/SoundSelector.tsx';
@@ -8,7 +8,38 @@ import LoadSampleButton from './components/LoadSampleButton.tsx';
 import * as Juce from "juce-framework-frontend";
 import './App.css'
 
+const customSound_Change_EventId = "onCustomSoundChanged";
+
 function App() {
+  const [customSoundName, setCustomSoundName] = useState("")
+
+  // @ts-ignore
+  const getCustomSoundName = Juce.getNativeFunction("getCustomSoundName");
+
+  useEffect(() => {
+    // @ts-ignore
+    globalThis.onCustomSoundChangedId = window.__JUCE__.backend.addEventListener(
+      customSound_Change_EventId,
+      (args: any) =>{
+        setCustomSoundName(args);
+      }
+    );
+
+    (async() => {
+      // @ts-ignore
+      const sound_name = await getCustomSoundName();
+      setCustomSoundName(sound_name);
+    })();
+
+    return function cleanup() {
+      // @ts-ignore
+      window.__JUCE__.backend.removeEventListener(
+        // @ts-ignore
+        globalThis.onCustomSoundChangedId
+      );
+    };
+  }, [setCustomSoundName]);
+
   return (
     <>
       <div className="control-panel">
@@ -16,11 +47,14 @@ function App() {
           <div className="control-label">
             SOUND
           </div>
-          <div className="control-element">
+          <div className="control-sound">
             <SoundSelector/>
           </div>
-          <div className="control-element">
+          <div className="control-sound">
             <LoadSampleButton text="Load Custom Sound"/>
+          </div>
+          <div style={{width: '300px'}}>
+            Custom: {customSoundName}
           </div>
         </div>
         <div className="control-block">

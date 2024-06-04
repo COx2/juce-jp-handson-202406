@@ -279,6 +279,11 @@ void AudioPluginAudioProcessor::loadCustomSoundFile(const juce::File& fileToLoad
     customSoundFilePath = fileToLoad.getFullPathName();
 }
 
+juce::Value& AudioPluginAudioProcessor::getCustomSoundFileValue()
+{
+    return customSoundFilePath;
+}
+
 void AudioPluginAudioProcessor::valueChanged(juce::Value& value)
 {
     if (value.refersToSameSourceAs(customSoundFilePath))

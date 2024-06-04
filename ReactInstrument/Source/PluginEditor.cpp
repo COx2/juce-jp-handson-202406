@@ -37,10 +37,13 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     // editor's size to whatever you need it to be.
     setSize (960, 420);
     setResizable(true, true);
+
+    processorRef.getCustomSoundFileValue().addListener(this);
 }
 
 AudioPluginAudioProcessorEditor::~AudioPluginAudioProcessorEditor()
 {
+    processorRef.getCustomSoundFileValue().removeListener(this);
 }
 
 //==============================================================================
@@ -103,4 +106,13 @@ void AudioPluginAudioProcessorEditor::resized()
     auto rect_web_ui = rect_ui;
 
     webViewBackend->setBounds (rect_web_ui);
+}
+
+void AudioPluginAudioProcessorEditor::valueChanged(juce::Value& value)
+{
+    if (value.refersToSameSourceAs(processorRef.getCustomSoundFileValue()))
+    {
+        juce::var file_name = juce::File(value.getValue()).getFileName();
+        webViewBackend->emitCustomSoundChangedEvent(file_name);
+    }
 }

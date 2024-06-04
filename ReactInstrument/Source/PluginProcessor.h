@@ -53,6 +53,7 @@ public:
     //==============================================================================
     juce::String getSamplerSupportedFormatWildcard() const;
     void loadCustomSoundFile(const juce::File& fileToLoad);
+    juce::Value& getCustomSoundFileValue();
 
 private:
     //==============================================================================

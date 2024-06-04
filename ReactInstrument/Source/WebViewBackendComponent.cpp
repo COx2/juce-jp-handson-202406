@@ -97,6 +97,11 @@ WebViewBackendComponent::~WebViewBackendComponent()
 {
 }
 
+void WebViewBackendComponent::emitCustomSoundChangedEvent(const juce::var& soundName)
+{
+    webComponent.emitEventIfBrowserIsVisible("onCustomSoundChanged", soundName);
+}
+
 //==============================================================================
 void WebViewBackendComponent::paint(juce::Graphics&)
 {

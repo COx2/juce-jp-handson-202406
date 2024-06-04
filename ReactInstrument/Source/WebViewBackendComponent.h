@@ -14,6 +14,8 @@ public:
     explicit WebViewBackendComponent(AudioPluginAudioProcessor& processor, AudioPluginAudioProcessorEditor& editorRoot);
     ~WebViewBackendComponent() override;
 
+    void emitCustomSoundChangedEvent(const juce::var& soundName);
+
 private:
     //==============================================================================
     void paint(juce::Graphics&) override;
@@ -99,6 +101,22 @@ private:
                 safe_this->editorRootRef.openCustomSoundFileChooser();
 
                 complete(juce::var(0));
+                return;
+            })
+        .withNativeFunction("getCustomSoundName",
+            [safe_this = juce::Component::SafePointer(this)]
+            (const juce::Array<juce::var>& args, std::function<void(juce::var)> complete)
+            -> void
+            {
+                if (safe_this.getComponent() == nullptr)
+                {
+                    complete(juce::var(""));
+                    return;
+                }
+
+                juce::var file_name = juce::File(safe_this->processorRef.getCustomSoundFileValue().getValue()).getFileName();
+
+                complete(juce::var(file_name));
                 return;
             })
         .withResourceProvider([this](const auto& url)

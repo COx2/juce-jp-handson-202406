@@ -11,6 +11,7 @@ class WebViewBackendComponent;
 //==============================================================================
 class AudioPluginAudioProcessorEditor final
     : public juce::AudioProcessorEditor
+    , private juce::Value::Listener
 {
 public:
     //==============================================================================
@@ -24,6 +25,9 @@ private:
     //==============================================================================
     void paint (juce::Graphics&) override;
     void resized() override;
+
+    //==============================================================================
+    void valueChanged(juce::Value& value) override;
 
     //==============================================================================
     AudioPluginAudioProcessor& processorRef;

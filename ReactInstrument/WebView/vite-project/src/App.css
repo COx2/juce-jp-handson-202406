@@ -30,11 +30,14 @@
   top: 0px;
 }
 
-.control-element {
+.control-sound {
   /* border: solid; */
+  width: 240px;
   position: relative;
   top: 0px;
-  margin: 10px;
+  margin: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .force-centering {

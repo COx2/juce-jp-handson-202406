@@ -3,7 +3,6 @@ import Button from '@mui/material/Button';
 import * as Juce from "juce-framework-frontend";
 
 const LoadSampleButton = (props: any) => {
-    
     const onButtonClicked = Juce.getNativeFunction("onLoadCustomSound");
 
     return (
