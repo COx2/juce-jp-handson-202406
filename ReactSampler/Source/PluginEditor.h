@@ -13,6 +13,7 @@ class AudioPluginAudioProcessorEditor final
     : public juce::AudioProcessorEditor
 {
 public:
+    //==============================================================================
     explicit AudioPluginAudioProcessorEditor (AudioPluginAudioProcessor&);
     ~AudioPluginAudioProcessorEditor() override;
 

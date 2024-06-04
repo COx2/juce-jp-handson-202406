@@ -2,9 +2,10 @@
 #include "WebViewBundleData.h"
 
 #ifndef WEB_VIEW_FROM_DEV_SERVER
-#define WEB_VIEW_FROM_DEV_SERVER 1
+#define WEB_VIEW_FROM_DEV_SERVER 0
 #endif
 
+//==============================================================================
 namespace
 {
     static const char* getMimeForExtension(const juce::String& extension)
@@ -65,6 +66,48 @@ namespace
     }
 }
 
+//==============================================================================
+// WebViewBackendComponent
+//==============================================================================
+WebViewBackendComponent::WebViewBackendComponent(AudioPluginAudioProcessor& processor, AudioPluginAudioProcessorEditor& editorRoot)
+    : misWebViewBundle(WebView::WebViewBundle_zip, WebView::WebViewBundle_zipSize, false)
+    , zipWebViewBundle(std::make_unique<juce::ZipFile>(misWebViewBundle))
+    , processorRef(processor)
+    , editorRootRef(editorRoot)
+    , gainAttachment(
+        *processorRef.getAPVTS().getParameter("gain"),
+        gainSliderRelay,
+        processorRef.getAPVTS().undoManager)
+    , soundSelectorAttachment(
+        *processorRef.getAPVTS().getParameter("soundSelector"),
+        soundSelectorRelay,
+        processorRef.getAPVTS().undoManager)
+    , midiKeyboardStatePtr(processorRef.getMidiKeyboardState())
+{
+    addAndMakeVisible(webComponent);
+
+#if WEB_VIEW_FROM_DEV_SERVER
+    webComponent.goToURL(SinglePageBrowser::localDevServerAddress);
+#else
+    webComponent.goToURL(juce::WebBrowserComponent::getResourceProviderRoot());
+#endif
+}
+
+WebViewBackendComponent::~WebViewBackendComponent()
+{
+}
+
+//==============================================================================
+void WebViewBackendComponent::paint(juce::Graphics&)
+{
+}
+
+void WebViewBackendComponent::resized()
+{
+    webComponent.setBounds(getLocalBounds());
+}
+
+//==============================================================================
 std::optional<juce::WebBrowserComponent::Resource> WebViewBackendComponent::getResource(const juce::String& url)
 {
     const auto urlToRetrive = url == "/" ? juce::String{ "index.html" }
@@ -96,45 +139,4 @@ std::optional<juce::WebBrowserComponent::Resource> WebViewBackendComponent::getR
     }
 
     return std::nullopt;
-}
-
-WebViewBackendComponent::WebViewBackendComponent(AudioPluginAudioProcessor& processor, AudioPluginAudioProcessorEditor& editorRoot)
-    : misWebViewBundle(WebView::WebViewBundle_zip, WebView::WebViewBundle_zipSize, false)
-    , zipWebViewBundle(std::make_unique<juce::ZipFile>(misWebViewBundle))
-    , processorRef(processor)
-    , editorRootRef(editorRoot)
-    , gainAttachment(
-        *processorRef.getAPVTS().getParameter("gain"),
-        gainSliderRelay,
-        processorRef.getAPVTS().undoManager)
-    , soundSelectorAttachment(
-        *processorRef.getAPVTS().getParameter("soundSelector"),
-        soundSelectorRelay,
-        processorRef.getAPVTS().undoManager)
-    , midiKeyboardStatePtr(processorRef.getMidiKeyboardState())
-{
-    addAndMakeVisible(webComponent);
-
-#if WEB_VIEW_FROM_DEV_SERVER
-    webComponent.goToURL(SinglePageBrowser::localDevServerAddress);
-#else
-    webComponent.goToURL(juce::WebBrowserComponent::getResourceProviderRoot());
-#endif
-}
-
-WebViewBackendComponent::~WebViewBackendComponent()
-{
-}
-
-void WebViewBackendComponent::paint(juce::Graphics&)
-{
-}
-
-void WebViewBackendComponent::resized()
-{
-    webComponent.setBounds(getLocalBounds());
-}
-
-void WebViewBackendComponent::timerCallback()
-{
 }

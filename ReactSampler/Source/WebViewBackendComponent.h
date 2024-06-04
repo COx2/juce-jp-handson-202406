@@ -8,9 +8,9 @@
 //==============================================================================
 class WebViewBackendComponent
     : public juce::Component
-    , private juce::Timer
 {
 public:
+    //==============================================================================
     explicit WebViewBackendComponent(AudioPluginAudioProcessor& processor, AudioPluginAudioProcessorEditor& editorRoot);
     ~WebViewBackendComponent() override;
 
@@ -20,14 +20,12 @@ private:
     void resized() override;
 
     //==============================================================================
-    void timerCallback() override;
-
-    //==============================================================================
     std::optional<juce::WebBrowserComponent::Resource> getResource(const juce::String& url);
 
     //==============================================================================
     AudioPluginAudioProcessor& processorRef;
     AudioPluginAudioProcessorEditor& editorRootRef;
+    std::weak_ptr<juce::MidiKeyboardState> midiKeyboardStatePtr;
 
     juce::MemoryInputStream misWebViewBundle;
     std::unique_ptr<juce::ZipFile> zipWebViewBundle;
@@ -112,8 +110,6 @@ private:
 
     juce::WebSliderParameterAttachment gainAttachment;
     juce::WebComboBoxParameterAttachment soundSelectorAttachment;
-
-    std::weak_ptr<juce::MidiKeyboardState> midiKeyboardStatePtr;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WebViewBackendComponent)
 };
