@@ -35,7 +35,7 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
 
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
-    setSize (960, 420);
+    setSize (1440, 960);
     setResizable(true, true);
 
     processorRef.getCustomSoundFileValue().addListener(this);
