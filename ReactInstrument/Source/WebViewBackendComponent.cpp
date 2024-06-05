@@ -46,9 +46,9 @@ namespace
 
         stream.setPosition(0);
 
-        [[maybe_unused]] const auto bytesRead = stream.read(result.data(), result.size());
+        [[maybe_unused]] const auto bytesRead = (size_t)stream.read(result.data(), result.size());
 
-        jassert(bytesRead == (ssize_t)result.size());
+        jassert(bytesRead == result.size());
 
         return result;
     }
