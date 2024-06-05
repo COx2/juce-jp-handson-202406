@@ -48,7 +48,7 @@ namespace
 
         [[maybe_unused]] const auto bytesRead = stream.read(result.data(), result.size());
 
-        jassert(bytesRead == (juce::ssize_t)result.size());
+        jassert(bytesRead == (ssize_t)result.size());
 
         return result;
     }
