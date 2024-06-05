@@ -39,6 +39,15 @@
             }
         },
         {
+            "name": "xcode",
+            "displayName": "Xcode",
+            "description": "Default build using Xcode generator",
+            "inherits": [
+                "base"
+            ],
+            "generator": "Xcode"
+        },
+        {
             "name": "ninja-multi",
             "displayName": "Ninja Multi-Config",
             "description": "Default build using Ninja Multi-Config generator",
@@ -47,13 +56,34 @@
             ]
         },
         {
-            "name": "xcode",
-            "displayName": "Xcode",
-            "description": "Default build using Xcode generator",
+            "name": "ninja-single-debug",
+            "displayName": "Ninja",
+            "description": "Debug config using Ninja generator",
             "inherits": [
                 "base"
             ],
-            "generator": "Xcode"
+            "generator": "Ninja",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": {
+                    "type": "STRING",
+                    "value": "Debug"
+                }
+            }
+        },
+        {
+            "name": "ninja-single-release",
+            "displayName": "Ninja",
+            "description": "Release config using Ninja generator",
+            "inherits": [
+                "base"
+            ],
+            "generator": "Ninja",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": {
+                    "type": "STRING",
+                    "value": "Release"
+                }
+            }
         }
     ],
     "buildPresets": [
@@ -78,20 +108,6 @@
             "inherits": "base"
         },
         {
-            "name": "ninja-debug",
-            "description": "Build using Ninja for Debug",
-            "configurePreset": "ninja-multi",
-            "configuration": "Debug",
-            "inherits": "base"
-        },
-        {
-            "name": "ninja-release",
-            "description": "Build using Ninja for Release",
-            "configurePreset": "ninja-multi",
-            "configuration": "Release",
-            "inherits": "base"
-        },
-        {
             "name": "xcode-debug",
             "description": "Build using Xcode for Debug",
             "configurePreset": "xcode",
@@ -103,6 +119,32 @@
             "description": "Build using Xcode for Release",
             "configurePreset": "xcode",
             "configuration": "Release",
+            "inherits": "base"
+        },
+        {
+            "name": "ninja-multi-debug",
+            "description": "Build using Ninja for Debug",
+            "configurePreset": "ninja-multi",
+            "configuration": "Debug",
+            "inherits": "base"
+        },
+        {
+            "name": "ninja-multi-release",
+            "description": "Build using Ninja for Release",
+            "configurePreset": "ninja-multi",
+            "configuration": "Release",
+            "inherits": "base"
+        },
+        {
+            "name": "ninja-single-debug",
+            "description": "Build using Ninja for Debug",
+            "configurePreset": "ninja-single-debug",
+            "inherits": "base"
+        },
+        {
+            "name": "ninja-single-release",
+            "description": "Build using Ninja for Release",
+            "configurePreset": "ninja-single-release",
             "inherits": "base"
         }
     ]

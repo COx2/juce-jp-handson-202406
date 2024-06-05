@@ -11,11 +11,14 @@ SCRIPT_DIRECTORY="$(dirname "$(realpath "$0")")"
 
 cd "${SCRIPT_DIRECTORY}/../"
 
-echo "Configure from preset..."
-cmake --preset ninja-multi
+echo "Debug Configure from preset..."
+cmake --preset ninja-single-debug
 
 echo "Build Debug version..."
-cmake --build --preset ninja-debug
+cmake --build --preset ninja-single-debug
+
+echo "Release Configure from preset..."
+cmake --preset ninja-single-release
 
 echo "Build Release version..."
-cmake --build --preset ninja-release
+cmake --build --preset ninja-single-release
