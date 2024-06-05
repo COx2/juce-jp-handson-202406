@@ -70,10 +70,11 @@ namespace
 // WebViewBackendComponent
 //==============================================================================
 WebViewBackendComponent::WebViewBackendComponent(AudioPluginAudioProcessor& processor, AudioPluginAudioProcessorEditor& editorRoot)
-    : misWebViewBundle(WebView::WebViewBundle_zip, WebView::WebViewBundle_zipSize, false)
-    , zipWebViewBundle(std::make_unique<juce::ZipFile>(misWebViewBundle))
-    , processorRef(processor)
+    : processorRef(processor)
     , editorRootRef(editorRoot)
+    , midiKeyboardStatePtr(processorRef.getMidiKeyboardState())
+    , misWebViewBundle(WebView::WebViewBundle_zip, WebView::WebViewBundle_zipSize, false)
+    , zipWebViewBundle(std::make_unique<juce::ZipFile>(misWebViewBundle))
     , gainAttachment(
         *processorRef.getAPVTS().getParameter("gain"),
         gainSliderRelay,
@@ -82,7 +83,6 @@ WebViewBackendComponent::WebViewBackendComponent(AudioPluginAudioProcessor& proc
         *processorRef.getAPVTS().getParameter("soundSelector"),
         soundSelectorRelay,
         processorRef.getAPVTS().undoManager)
-    , midiKeyboardStatePtr(processorRef.getMidiKeyboardState())
 {
     addAndMakeVisible(webComponent);
 

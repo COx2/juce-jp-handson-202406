@@ -92,6 +92,8 @@ private:
             (const juce::Array<juce::var>& args, std::function<void(juce::var)> complete)
             -> void
             {
+                juce::ignoreUnused(args);
+            
                 if (safe_this.getComponent() == nullptr)
                 {
                     complete(juce::var(-1));
@@ -108,6 +110,8 @@ private:
             (const juce::Array<juce::var>& args, std::function<void(juce::var)> complete)
             -> void
             {
+                juce::ignoreUnused(args);
+                
                 if (safe_this.getComponent() == nullptr)
                 {
                     complete(juce::var(""));
