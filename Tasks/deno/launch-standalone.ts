@@ -27,7 +27,7 @@ if(platform.toString() === "windows")
 }
 else if(platform.toString() === "darwin")
 {
-    await $`${__root_directory}/builds/xcode/ReactInstrument/ReactInstrument_artefacts/Release/Standalone/ReactInstrument.app`;
+    await $`${__root_directory}/builds/xcode/ReactInstrument/ReactInstrument_artefacts/Release/Standalone/ReactInstrument.app/Contents/MacOS/ReactInstrument`;
 }
 else if(platform.toString() === "linux")
 {
