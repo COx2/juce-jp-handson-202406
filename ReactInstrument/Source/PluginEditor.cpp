@@ -10,7 +10,7 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
 {
     // Native view......
     genericEditor = std::make_unique<juce::GenericAudioProcessorEditor>(processorRef);
-    addAndMakeVisible(genericEditor.get());
+    // addAndMakeVisible(genericEditor.get());
 
     buttonCustomSound = std::make_unique<juce::TextButton>("Load Custom Sound");
     buttonCustomSound->onClick = 
@@ -22,12 +22,12 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
 
             safe_this->openCustomSoundFileChooser();
         };
-    addAndMakeVisible(buttonCustomSound.get());
+    // addAndMakeVisible(buttonCustomSound.get());
 
     midiKeyboardComponent = std::make_unique<juce::MidiKeyboardComponent>(
         *midiKeyboardStatePtr.get(),
         juce::KeyboardComponentBase::Orientation::horizontalKeyboard);
-    addAndMakeVisible(midiKeyboardComponent.get());
+    // addAndMakeVisible(midiKeyboardComponent.get());
 
     // Web view...
     webViewBackend = std::make_unique<WebViewBackendComponent>(processorRef, *this);

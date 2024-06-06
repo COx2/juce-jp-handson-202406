@@ -5,6 +5,7 @@
         "build:all": "deno task build:webviewbundle && deno task build:plugin",
         "build:webviewbundle": "deno run --allow-all ./Tasks/deno/build-webview-bundle.ts",
         "build:plugin": "deno run --allow-all ./Tasks/deno/build-plugin.ts",
-        "install:plugin": "deno run --allow-all ./Tasks/deno/install-plugin.ts"
+        "install:plugin": "deno run --allow-all ./Tasks/deno/install-plugin.ts",
+        "launch:standalone": "deno run --allow-all ./Tasks/deno/launch-standalone.ts"
     }
 }
