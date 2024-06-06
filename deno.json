@@ -2,6 +2,9 @@
     "tasks": {
         "get:webview2": "deno run --allow-all ./Tools/deno/nuget-dl.ts && deno run --allow-all ./Tasks/deno/get-webview2.ts",
         "get:samplepack": "deno run --allow-all ./Tasks/deno/get-samplepack.ts",
-        "build:webviewbundle": "deno run --allow-all ./ReactInstrument/WebView/build-webview-bundle.ts"
+        "build:all": "deno task build:webviewbundle && deno task build:plugin",
+        "build:webviewbundle": "deno run --allow-all ./Tasks/deno/build-webview-bundle.ts",
+        "build:plugin": "deno run --allow-all ./Tasks/deno/build-plugin.ts",
+        "install:plugin": "deno run --allow-all ./Tasks/deno/install-plugin.ts"
     }
 }

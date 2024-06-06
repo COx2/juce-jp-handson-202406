@@ -13,7 +13,6 @@ import { exists } from "https://deno.land/std/fs/mod.ts"
 //============================================
 console.log("Deno.cwd(): " + Deno.cwd());
 
-
 const __file_directory = fromFileUrl(new URL("./", import.meta.url));
 const __root_directory = fromFileUrl(new URL("../../", import.meta.url));
 Deno.chdir(__file_directory + "vite-project");
