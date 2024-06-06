@@ -8,6 +8,20 @@ https://deno.com/
 
 import { $ } from "https://deno.land/x/dax/mod.ts";
 import { fromFileUrl } from "https://deno.land/std/path/mod.ts";
+import { parseArgs } from "https://deno.land/std@0.224.0/cli/mod.ts";
+
+//============================================
+console.log("Deno.args:" + Deno.args);
+
+const flags = parseArgs(Deno.args, {
+    boolean: ["vst3", "clap", "au"],
+});
+
+// Array to store boolean flags keys
+const pluginFormatFlags = ['vst3', 'clap', 'au'];
+
+// Check if all boolean flags are false
+const allPluginFormatFlagsAreFalse = pluginFormatFlags.every(flag => !flags[flag]);
 
 //============================================
 console.log("Deno.cwd(): " + Deno.cwd());
@@ -23,17 +37,67 @@ console.log("Deno.build.os: " + platform.toString())
 
 if(platform.toString() === "windows")
 {
-    await $`cmake --install builds/vs2022 --prefix Release --component ReactInstrument_VST3`;
-    await $`cmake --install builds/vs2022 --prefix Release --component ReactInstrument_CLAP`;
+    if(allPluginFormatFlagsAreFalse)
+    {
+        await $`cmake --install builds/vs2022 --prefix Release --component ReactInstrument_VST3`;
+        await $`cmake --install builds/vs2022 --prefix Release --component ReactInstrument_CLAP`;
+    }
+    else
+    {
+        if(flags.vst3)
+        {
+            await $`cmake --install builds/vs2022 --prefix Release --component ReactInstrument_VST3`;
+        }
+
+        if(flags.clap)
+        {
+            await $`cmake --install builds/vs2022 --prefix Release --component ReactInstrument_CLAP`;
+        }
+    }
 }
 else if(platform.toString() === "darwin")
 {
-    await $`cmake --install builds/xcode --prefix Release --component ReactInstrument_AU`;
-    await $`cmake --install builds/xcode --prefix Release --component ReactInstrument_VST3`;
-    await $`cmake --install builds/xcode --prefix Release --component ReactInstrument_CLAP`;
+    if(allPluginFormatFlagsAreFalse)
+    {
+        await $`cmake --install builds/xcode --prefix Release --component ReactInstrument_AU`;
+        await $`cmake --install builds/xcode --prefix Release --component ReactInstrument_VST3`;
+        await $`cmake --install builds/xcode --prefix Release --component ReactInstrument_CLAP`;
+    }
+    else
+    {
+        if(flags.au)
+        {
+            await $`cmake --install builds/xcode --prefix Release --component ReactInstrument_AU`;
+        }
+
+        if(flags.vst3)
+        {
+            await $`cmake --install builds/xcode --prefix Release --component ReactInstrument_VST3`;
+        }
+
+        if(flags.clap)
+        {
+            await $`cmake --install builds/xcode --prefix Release --component ReactInstrument_CLAP`;
+        }
+    }
 }
 else if(platform.toString() === "linux")
 {
-    await $`cmake --install builds/ninja-single-release --prefix Release --component ReactInstrument_VST3`;
-    await $`cmake --install builds/ninja-single-release --prefix Release --component ReactInstrument_CLAP`;
+    if(allPluginFormatFlagsAreFalse)
+    {
+        await $`cmake --install builds/ninja-single-release --prefix Release --component ReactInstrument_VST3`;
+        await $`cmake --install builds/ninja-single-release --prefix Release --component ReactInstrument_CLAP`;
+    }
+    else
+    {
+        if(flags.vst3)
+        {
+            await $`cmake --install builds/ninja-single-release --prefix Release --component ReactInstrument_VST3`;
+        }
+
+        if(flags.clap)
+        {
+            await $`cmake --install builds/ninja-single-release --prefix Release --component ReactInstrument_CLAP`;
+        }
+    }
 }
