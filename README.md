@@ -178,7 +178,11 @@ sudo ./Scripts/install_macos_xcode_vst3.sh
 sudo ./Scripts/install_macos_xcode_clap.sh
 ```
 
-Linux:（準備中）
+Linux:ターミナルからsudo権限でスクリプトを実行してください。
+```sh
+sudo ./Scripts/install_linux_ninja_vst3.sh
+sudo ./Scripts/install_linux_ninja_clap.sh
+```
 
 ### スタンドアローン版の起動
 
