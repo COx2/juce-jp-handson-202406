@@ -3,15 +3,16 @@ import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei'
 import { Color } from 'three';
 import { Cube } from './Cube';
-import { Sphere } from './Sphere';
-import { Cone } from './Cone';
-import { Torus } from './Torus'
+// import { Sphere } from './Sphere';
+// import { Cone } from './Cone';
+// import { Torus } from './Torus'
 // @ts-ignore
 import { Perf } from 'r3f-perf'
 
-export const R3FScene: FC = () => {
+// @ts-ignore
+export const R3FScene: FC = (props: any) => {
   const bgColor = new Color("darkgray");
-
+  
   return (
     <Canvas
       camera={{
@@ -24,20 +25,14 @@ export const R3FScene: FC = () => {
       {/* <Perf/> */}
       <color
         attach="background"
-        args={[bgColor.r, bgColor.g, bgColor.b]}
+        // @ts-ignore
+        args={[props.knobValue, bgColor.g, bgColor.b]}
       />
       <Cube 
       // @ts-ignore
-      position={[-2.2, 1.2, -1.0]}/>
-      <Sphere 
+      position={[5, 0, -1.0]}
       // @ts-ignore
-      position={[2.2, 1.2, -1.0]}/>
-      <Cone
-      // @ts-ignore
-      position={[-2.2, -1.2, -1.0]}/>
-      <Torus
-      // @ts-ignore
-      position={[2.2, -1.2, -1.0]}/>
+      scale={props.knobValue * 2 + 0.2}/>
       <OrbitControls />
       <ambientLight args={[0xffffff]} intensity={0.2} />
       <directionalLight position={[0.3, 0.4, 1]} intensity={0.8} />

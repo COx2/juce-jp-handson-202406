@@ -5,7 +5,7 @@ import { Knob, Pointer, Value, Arc} from 'rc-knob'
 // @ts-ignore
 import * as Juce from "juce-framework-frontend";
 
-const GainKnob = () => {
+const GainKnob = (props: any) => {
   // @ts-ignore
   const sliderState = Juce.getSliderState("gainSlider");
 
@@ -34,11 +34,12 @@ const GainKnob = () => {
   useEffect(() => {
     const valueListenerId = sliderState.valueChangedEvent.addListener(() => {
       setValue0To1(sliderState.getNormalisedValue());
+      props.onKnobValueChange(sliderState.getNormalisedValue());
     });
     const propertiesListenerId = sliderState.propertiesChangedEvent.addListener(
       () => setProperties(sliderState.properties)
     );
-
+    props.onKnobValueChange(sliderState.getNormalisedValue());
     return function cleanup() {
       sliderState.valueChangedEvent.removeListener(valueListenerId);
       sliderState.propertiesChangedEvent.removeListener(propertiesListenerId);

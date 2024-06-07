@@ -6,8 +6,8 @@ export const Cube: FC = (props: any) => {
     // Set up state for the hovered and active state
     const [hovered, setHover] = useState(false)
     const [active, setActive] = useState(false)
-    const [scale, setScale] = useState(1.0)
-    const [count, setCount] = useState(1)
+    // const [scale, setScale] = useState(1.0)
+    // const [count, setCount] = useState(1)
 
     const cubeRef = useRef<Mesh>(null);
     useFrame(() => {
@@ -17,15 +17,15 @@ export const Cube: FC = (props: any) => {
         cube.rotation.y += 0.01;
         if(active)
         {
-            setScale(Math.sin(count * 0.01) * 2.0)
-            setCount((prevCount) => prevCount + 1);
+            // setScale(Math.sin(count * 0.01) * 2.0)
+            // setCount((prevCount) => prevCount + 1);
         }
     });
     return (
         <mesh 
             {...props}
             ref={cubeRef}
-            scale={active ? scale : 1.0}
+            scale={props.scale}
             onClick={() => setActive(!active)}
             onPointerOver={() => setHover(true)}
             onPointerOut={() => setHover(false)}

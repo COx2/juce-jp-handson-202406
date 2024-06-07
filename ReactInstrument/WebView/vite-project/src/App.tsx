@@ -12,7 +12,13 @@ import './App.css'
 const customSound_Change_EventId = "onCustomSoundChanged";
 
 function App() {
-  const [customSoundName, setCustomSoundName] = useState("")
+  const [customSoundName, setCustomSoundName] = useState("");
+  const [gainKnobValue, setGainKnobValue] = useState(100);
+
+  // @ts-ignore
+  const handleGainKnobValueChange = (newValue: any) => {
+    setGainKnobValue(newValue);
+  }
 
   // @ts-ignore
   const getCustomSoundName = Juce.getNativeFunction("getCustomSoundName");
@@ -64,7 +70,9 @@ function App() {
               GAIN
             </div>
             <div className="force-centering">
-              <GainKnob/>
+              <GainKnob 
+              // @ts-ignore
+              knobValue={gainKnobValue} onKnobValueChange={setGainKnobValue}/>
             </div>
           </div>
         </div>
@@ -73,7 +81,9 @@ function App() {
         </div>
       </div>
       <div className="r3f-box">
-        <R3FScene/>
+        <R3FScene
+        // @ts-ignore
+        knobValue={gainKnobValue}/>
       </div>
     </>
   )
