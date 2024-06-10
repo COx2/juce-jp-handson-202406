@@ -1,7 +1,7 @@
 # juce-jp-handson-202406
 
 2024年6月に実施したJUCE 8 ハンズオン＆ミートアップに向けて作成した、オーディオプラグインのGUIをWebViewで作成するサンプルコードです。  
-このプロジェクトは、C++とJUCE 8を使用したプロジェクトです。Windows、macOS、Linuxの環境をサポートしています。
+このプロジェクトは、C++とJUCE 8を使用したプロジェクトです。Windows、macOS、Linux、iOSの環境をサポートしています。
 
 [イベントページ(外部サイト)](https://juce.connpass.com/event/319164/)
 
@@ -24,6 +24,10 @@
     - VST3
     - CLAP
     - Standalone
+- iOS
+    - Standalone
+
+**iOS版のビルド手順は[iOS版のビルド手順]を参照してください**
 
 ## 前提条件
 
@@ -97,6 +101,8 @@ Available tasks:
     deno run --allow-all ./Tasks/deno/build-plugin-debug.ts
 - launch:standalone:debug
     deno run --allow-all ./Tasks/deno/launch-standalone-debug.ts
+- configure:ios
+    deno run --allow-all ./Tasks/deno/configure-ios.ts
 ```
 
 ### ビルド前の準備
@@ -211,6 +217,30 @@ deno task build:plugin:debug
 ```sh
 deno task launch:standalone:debug
 ```
+
+### iOS版のビルド手順
+
+#### DenoタスクでWebViewをビルドしてアーカイブファイルを作成する
+
+```sh
+deno task build:webviewbundle
+```
+
+#### DenoタスクでiOS用Xcodeプロジェクトを作成する
+
+```sh
+deno task configure:ios
+```
+
+#### Xcodeでプロジェクトを開く
+
+```sh
+open ./builds/xcode-ios/juce-jp-handson-202406.xcodeproj
+```
+
+iPhone/iPad Simulatorで実行することができます。
+
+![ipad-simulator](.image/ipad-simulator.png)
 
 ## Attention Regarding Licenses
 
