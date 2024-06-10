@@ -48,6 +48,21 @@
             "generator": "Xcode"
         },
         {
+            "name": "xcode-ios",
+            "displayName": "Xcode iOS",
+            "description": "Default build using Xcode generator",
+            "inherits": [
+                "base"
+            ],
+            "generator": "Xcode",
+            "cacheVariables": {
+                "CMAKE_SYSTEM_NAME": {
+                    "type": "STRING",
+                    "value": "iOS"
+                }
+            }
+        },
+        {
             "name": "ninja-multi",
             "displayName": "Ninja Multi-Config",
             "description": "Default build using Ninja Multi-Config generator",
@@ -118,6 +133,20 @@
             "name": "xcode-release",
             "description": "Build using Xcode for Release",
             "configurePreset": "xcode",
+            "configuration": "Release",
+            "inherits": "base"
+        },
+        {
+            "name": "xcode-ios-debug",
+            "description": "Build using Xcode iOS for Debug",
+            "configurePreset": "xcode-ios",
+            "configuration": "Debug",
+            "inherits": "base"
+        },
+        {
+            "name": "xcode-ios-release",
+            "description": "Build using Xcode iOS for Release",
+            "configurePreset": "xcode-ios",
             "configuration": "Release",
             "inherits": "base"
         },
