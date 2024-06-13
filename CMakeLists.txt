@@ -23,18 +23,20 @@ if (${CMAKE_SYSTEM_NAME} STREQUAL "iOS")
     #code signing to run on an iOS device:
     #    set(CMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "iPhone Developer" CACHE STRING "" FORCE)
     #    set(CMAKE_XCODE_ATTRIBUTE_DEVELOPMENT_TEAM "XXXXXXXXXX" CACHE STRING "" FORCE)
+
+    set(CMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED "NO")
 else ()
     set(CMAKE_OSX_DEPLOYMENT_TARGET "10.13" CACHE STRING "Minimum OS X deployment version" FORCE)
-endif ()
 
-# From clap: If running into issues when Xcode tries to codesign the CLAP plugin, you may want to add these lines:
-set(CMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED "NO")
-set(CMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED "NO")
+    option(UniversalBinary "Build universal binary for mac" ON)
 
-option(UniversalBinary "Build universal binary for mac" ON)
+    if (UniversalBinary)
+        set(CMAKE_OSX_ARCHITECTURES "x86_64;arm64" CACHE INTERNAL "")
+    endif ()
 
-if (UniversalBinary)
-    set(CMAKE_OSX_ARCHITECTURES "x86_64;arm64" CACHE INTERNAL "")
+    # From clap: If running into issues when Xcode tries to codesign the CLAP plugin, you may want to add these lines:
+    set(CMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED "NO")
+    set(CMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED "NO")
 endif ()
 
 # Static linking in Windows
